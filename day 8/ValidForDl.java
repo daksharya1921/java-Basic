@@ -2,12 +2,13 @@ class ValidForDl
 {
 	public static void main(String[] args)
 	{	
+		/*
 		if(args.length != 1)
 		{
 			System.out.println("plase provide a valid input");
 			return;
 		}
-		
+		*/
 		String ageStr = args[0];
 		
 		int age = Integer.parseInt(ageStr);
@@ -21,7 +22,7 @@ class ValidForDl
 		}
 		else
 		{
-			System.out.println("You are not in required limit."+ age+"  ur's age");
+			System.out.println("You are not in required limit "+ age+"  ur's age");
 		}
 	
 	}
