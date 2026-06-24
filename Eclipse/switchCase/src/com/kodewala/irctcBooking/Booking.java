@@ -6,9 +6,7 @@ public class Booking {
 
 	
 	
-	public static void main(String[] args) {
-		
-	}
+	
 	public  static void  conditionBooking(int noOfTickets , char coachTypes) {
 		
 		switch (coachTypes) {
