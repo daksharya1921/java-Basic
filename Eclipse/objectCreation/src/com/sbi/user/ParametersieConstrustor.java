@@ -13,10 +13,15 @@ public class ParametersieConstrustor {
 	
 	ParametersieConstrustor(String _name, String _userId, String _pwd, int _balance){
 		System.out.println("ParametersieConstrustor.SBIUser()");
-		name = _name;
-		userId = _userId;
-		pwd = _pwd;
-		balance = _balance;
+//		name = _name;
+//		userId = _userId;
+//		pwd = _pwd;
+//		balance = _balance;   
+		
+		this.name = _name;  //same just more readable
+		this.userId = _userId;
+		this.pwd = _pwd;
+		this.balance = _balance;
 	}
 	
 	
