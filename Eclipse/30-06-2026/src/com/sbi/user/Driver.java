@@ -6,7 +6,7 @@ public class Driver {
 		
 		Deposit d = new Deposit(123,324);
 		
-		d.totalBalance();
+		//d.totalBalance();
 	}
 
 }

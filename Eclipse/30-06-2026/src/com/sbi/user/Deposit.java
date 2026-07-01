@@ -31,6 +31,7 @@ public class Deposit {
 		this.balance = _balance;
 		this.deposit = _deposit;
 		
+		
 	}
 	
 	void totalBalance(int accountNumber,int balance, int deposit) {
