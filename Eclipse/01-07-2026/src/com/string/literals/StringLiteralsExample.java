@@ -13,9 +13,9 @@ public class StringLiteralsExample {
 		
 		String firstName = "Daksh"; // -> no new object will created in SCP cuz its already present in SCP firstName will Refer the same address
 		
-		System.out.println("name == firstName: "+(name == firstName));
+		System.out.println("name == firstName: "+(name == firstName)); //true
 		
-		System.out.println("name1 == fullName: "+(name1 == fullName));
+		System.out.println("name1 == fullName: "+(name1 == fullName)); //false
 		
 		
 
