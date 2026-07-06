@@ -16,7 +16,7 @@ public class Override {
 		System.out.println(a1 == b1); //   
 	
 		
-//		String a = "Daksh";
+	String a = "Daksh";
 //		String b = new String("Daksh");
 //		
 //		System.out.println(a == b);
