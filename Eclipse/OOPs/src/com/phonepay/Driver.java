@@ -4,7 +4,7 @@ public class Driver {
 
 	public static void main(String[] args) {
 
-		Account account = new Account(1000, "35467890@upi");
+		Account account = new Account(1000, "35467890@upi"); 
 		System.out.println(account.getCheckBalance());
 		
 		
