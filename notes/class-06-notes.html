@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 04</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+.keywordbox{background:#1e1e2f;color:#d4d4f7;padding:16px;border-radius:10px;font-family:monospace;line-height:1.6;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 04 — Configuration vs Hardcoding, Java Identifiers & Reserved Keywords</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Why code should be flexible (long product lifespan example)</li>
+<li>Code vs Configuration — avoiding hardcoding for values that may change</li>
+<li>Example: currency, interest rate, dynamic file names</li>
+<li>Properties file concept (key-value configuration)</li>
+<li>Using command line arguments to avoid hardcoded file names</li>
+<li>Java Identifiers — definition and rules</li>
+<li>Allowed characters in identifiers</li>
+<li>Reserved keywords in Java</li>
+<li>Java is case-sensitive</li>
+<li>How the compiler parses class structure using keywords</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Why Code Must Be Flexible</b>
+<p>A product/application (e.g. a ride-booking app) can remain in the market for many years (instructor used 15 years as an example). Since it will be used continuously, code should be written so that future changes don't require modifying the Java code itself.</p>
+</div>
+
+<div class="card">
+<b>Code vs Configuration</b>
+<p>A good developer separates <b>Code</b> from <b>Configuration</b>. Configuration refers to values that <b>may change in the future</b> — such as currency type, interest rate, or file paths. These should not be hardcoded inside the Java code; they should be read from a configuration file, command line argument, or database instead.</p>
+</div>
+
+<div class="card">
+<b>Example: Currency</b>
+<p>If a payment module hardcodes the currency as <code>"INR"</code>, expanding the application to another country (e.g. supporting USD or EUR) would require a Java code change, recompilation, and a full testing cycle. Reading the currency from a configuration source instead allows the value to be updated without touching the Java code.</p>
+</div>
+
+<div class="card">
+<b>Properties File (Configuration Example)</b>
+<p>A configuration file (e.g. <code>rapido.properties</code>) stores values as <b>key-value pairs</b> alongside the Java code. To change a value, you update the file and restart the application — no code change, no recompilation needed.</p>
+</div>
+
+<div class="card">
+<b>Why Avoiding Hardcoding Saves Time</b>
+<p>Changing hardcoded Java code requires: code change → compile → unit testing → QA testing → system integration testing → pre-prod → production. This cycle can take 5–7 days or more. Reading from configuration instead can reduce the same change to a two-minute task (update value + restart application).</p>
+</div>
+
+<div class="card">
+<b>Example: Inconsistent File Names</b>
+<p>When multiple people submit data files (e.g. marketing/sales data from different cities), each person may name their file differently. A program should not hardcode an expected file name — it should accept the file name flexibly (e.g. via command line argument) so it can process whatever file name is actually given.</p>
+</div>
+
+<div class="card">
+<b>Java Identifiers</b>
+<p>An <b>identifier</b> is the name given to a <b>class, variable, or method</b> — it is how you uniquely refer to that class/variable/method in code. Example: in <code>class DataProcessor</code>, <code>DataProcessor</code> is an identifier; in a variable declaration, the variable name is an identifier.</p>
+</div>
+
+<div class="card">
+<b>Rules for Identifiers</b>
+<ul>
+<li>Allowed characters: uppercase letters (A–Z), lowercase letters (a–z), digits (0–9), underscore (<code>_</code>), and dollar sign (<code>$</code>)</li>
+<li>An identifier <b>cannot start with a digit</b> (e.g. <code>1DataProcessor</code> is invalid, but <code>DataProcessor1</code> is valid)</li>
+<li>It <b>can start with</b> an underscore or dollar sign (e.g. <code>_DataProcessor</code> or <code>$DataProcessor</code> are valid)</li>
+<li>Other special characters (e.g. <code>&</code>, <code>%</code>) are <b>not allowed</b> in identifiers</li>
+<li>If an identifier is missing where expected, the compiler shows the error: <code>identifier expected</code></li>
+</ul>
+</div>
+
+<div class="card">
+<b>Reserved Keywords</b>
+<p>Java has 55+ <b>reserved keywords</b> — words with a predefined meaning used by the compiler and JVM (e.g. <code>class</code>, <code>public</code>, <code>static</code>, <code>void</code>, <code>int</code>). These <b>cannot be used as identifiers</b> (cannot be used as a class, method, or variable name), since the compiler relies on them to understand code structure.</p>
+</div>
+
+<div class="card">
+<b>Reserved Keywords Are Always Lowercase</b>
+<p>All Java reserved keywords are written in lowercase. This means a word like <code>Public</code> (capital P) is <b>not</b> a reserved keyword and can legally be used as an identifier — because Java is <b>case-sensitive</b> (<code>public</code> and <code>Public</code> are treated as different words).</p>
+</div>
+
+<div class="card">
+<b>How the Compiler Uses Keywords to Parse Structure</b>
+<p>The compiler recognizes the overall structure of a class using reserved keywords. For example, after the <code>class</code> keyword, it expects a class name (identifier), followed by either <code>extends</code>, <code>implements</code>, or an opening curly brace <code>{</code> — not another arbitrary name directly. This is how the compiler validates and understands code structure.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Bad practice — hardcoded configuration value:</b></p>
+<pre><code class="language-java">String currency = "INR"; // hardcoded — bad practice</code></pre>
+
+<p><b>Better practice — read from configuration:</b></p>
+<pre><code class="language-java">String currency = readFromConfig("currency"); // read from configuration file/database</code></pre>
+
+<p><b>Example properties file (rapido.properties):</b></p>
+<pre><code class="language-properties">currency=INR</code></pre>
+
+<p><b>Bad practice — hardcoded file name:</b></p>
+<pre><code class="language-java">class DataProcessor {
+
+    public static void main(String[] args) {
+        String fileName = "data_08_June.xls"; // hardcoded — not flexible
+        System.out.println("Processing " + fileName);
+    }
+
+}</code></pre>
+
+<p><b>Better practice — file name from command line argument:</b></p>
+<pre><code class="language-java">class DataProcessor {
+
+    public static void main(String[] args) {
+        String fileName = args[0]; // flexible — supplied at runtime
+        System.out.println("Processing " + fileName);
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java DataProcessor June_1st_week_data.xls</code></pre>
+
+<p><b>Identifier example — this fails to compile:</b></p>
+<pre><code class="language-java">= 20; // missing identifier (variable name) — compiler error: "identifier expected"</code></pre>
+
+<p><b>Correct:</b></p>
+<pre><code class="language-java">int amount = 20; // "amount" is the identifier</code></pre>
+
+<p><b>Reserved keyword used incorrectly as a method name — fails to compile:</b></p>
+<pre><code class="language-java">public public() {  } // "public" is a reserved keyword, cannot be used as identifier</code></pre>
+
+<p><b>Valid — because Java is case-sensitive:</b></p>
+<pre><code class="language-java">public Public() {  } // "Public" (capital P) is NOT a reserved keyword, so this compiles</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>What is the advantage of using command line arguments?</td><td>It gives flexibility — values can be changed without modifying and recompiling the Java code.</td></tr>
+<tr><td>What is an identifier?</td><td>The name given to a class, variable, or method — used to uniquely identify it in code.</td></tr>
+<tr><td>Can reserved keywords be used as identifiers?</td><td>No. Reserved keywords have a specific compiler/JVM purpose and cannot be reused as a class, method, or variable name.</td></tr>
+<tr><td>Can an identifier start with a number?</td><td>No — identifiers cannot start with a digit, though digits can appear later in the name.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Never hardcode values that are likely to change — use configuration, command line arguments, or database values instead.</li>
+<li>Identifiers can contain letters, digits, underscore, and dollar sign — but cannot start with a digit.</li>
+<li>Reserved keywords are always lowercase and cannot be used as identifiers; capitalized versions of keywords are valid identifiers since Java is case-sensitive.</li>
+<li>The compiler uses reserved keywords to understand code structure (e.g. what follows the <code>class</code> keyword).</li>
+<li>A missing identifier where one is expected produces the compiler error: <code>identifier expected</code>.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Pick a use case (other than currency/interest rate examples) and show how to make a hardcoded value flexible using a command line argument.</li>
+<li>Explore Java identifiers with sample examples — try valid and invalid identifier names.</li>
+<li>Try using a reserved keyword as a class/method name and observe the compiler error.</li>
+<li>Review the full list of Java reserved keywords (provided in class notes/handout).</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Command line arguments, avoiding hardcoding basics</li>
+<li><b>Upcoming Topics (mentioned by instructor):</b> Configuration property files, YML files (advanced flexibility techniques); class test this Friday</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>📚 Reserved Keywords Mentioned in Class</h2>
+<div class="keywordbox">
+class, interface, abstract, final, if, else, while, do, switch, byte, short, int, long, float, double, boolean, char, private, protected, public, default, continue, return, break, implements, extends, instanceof, finally, super, this, synchronized, volatile, true, false, goto, package, import, assert, new, static, void
+</div>
+<p style="margin-top:12px;font-size:14px;color:#777;">Note: <code>finalize</code> was mentioned as <b>not</b> a keyword (it's a method), and was removed in Java 19.</p>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. No technical content was added beyond what the instructor taught. Motivational/attendance/career-advice discussion at the end of class was excluded as non-technical content.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

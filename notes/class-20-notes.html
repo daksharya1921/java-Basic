@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 20</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 20 — Private Constructors, Singleton Intro & Strings</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Recap: purpose of constructor — initializing object state</li>
+<li>Private constructors — what they restrict and why</li>
+<li>Singleton design pattern — brief introduction</li>
+<li>Instance variables recap — each object has its own copy</li>
+<li>Refactoring: moving duplicate constructor logic into IIB (best practice)</li>
+<li>Strings — String is a class, not a primitive type</li>
+<li>String Constant Pool (SCP) — what it is, where it lives (heap, post-Java 8)</li>
+<li>Two ways to create Strings: literal vs new keyword</li>
+<li>Why Strings are treated specially (heavy reuse across applications)</li>
+<li>String immutability — what it actually means</li>
+<li>Comparing object references using == </li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Private Constructors</b>
+<p>A constructor can be marked <code>private</code>. This means it can only be called <b>within the same class</b> — no other class can create an object of that class using <code>new</code> from outside. This is different from a private method/field only in that it restricts <b>object creation itself</b>.</p>
+</div>
+
+<div class="card">
+<b>Singleton Design Pattern (Introduced)</b>
+<p>A common use case for a private constructor: ensuring a class can have <b>only one instance (object)</b> throughout the entire application. The class itself controls object creation internally — if an object already exists, it returns the existing one instead of creating a new one. This is called the <b>Singleton design pattern</b>.</p>
+</div>
+
+<div class="card">
+<b>Refactoring Constructor Logic into IIB (Best Practice)</b>
+<p>When multiple overloaded constructors all need to run the same line of setup logic (e.g. incrementing an object counter), duplicating that line in every constructor is inefficient and error-prone at scale. The better approach: move that shared logic into an <b>Instance Initialization Block (IIB)</b>, since IIB runs automatically for every constructor/object creation — eliminating duplication.</p>
+</div>
+
+<div class="card">
+<b>String is a Class, Not a Primitive</b>
+<p>Unlike int, boolean, char, etc. (primitive data types), <code>String</code> is a <b>class</b> in Java — specifically part of the <code>java.lang</code> package. This means a String is always a <b>non-primitive (object) type</b>, and creating a String means creating an object.</p>
+</div>
+
+<div class="card">
+<b>String Constant Pool (SCP)</b>
+<p>A special reserved area used specifically for String objects created via literals. Before Java 8, SCP was part of <b>PermGen</b>; from Java 8 onward, it is part of the <b>Heap</b>.</p>
+</div>
+
+<div class="card">
+<b>Two Ways to Create a String</b>
+<ul>
+<li><b>String literal</b>: <code>String city = "Bangalore";</code> — no <code>new</code> keyword, always goes to the <b>String Constant Pool</b></li>
+<li><b>Using new keyword</b>: <code>String city = new String("Bangalore");</code> — creates a separate object (typically directly in the heap, outside SCP) — covered further in upcoming classes</li>
+</ul>
+</div>
+
+<div class="card">
+<b>SCP Deduplication Rule</b>
+<p>When creating a String via a literal, Java first <b>checks whether a String with the exact same content already exists</b> in the SCP. If it does, <b>no new object is created</b> — the new reference simply points to the existing object. If it doesn't exist, a new object is created in the SCP. This means there is never more than one object with the same content in the SCP at a time.</p>
+</div>
+
+<div class="card">
+<b>Case Sensitivity Matters</b>
+<p>Since Java is case-sensitive, <code>"Bangalore"</code> and <code>"bangalore"</code> (different capitalization) are treated as <b>different content</b> — each would get its own separate object in the SCP.</p>
+</div>
+
+<div class="card">
+<b>Why Strings Get Special Treatment</b>
+<p>Strings are used extremely heavily across virtually all applications (roughly 80–90% of fields in real-world systems are String type — names, addresses, descriptions, etc.). To avoid excessive memory usage from creating duplicate objects with identical content repeatedly, Java optimizes heap usage specifically for Strings via the SCP deduplication mechanism.</p>
+</div>
+
+<div class="card">
+<b>String Immutability — What It Actually Means</b>
+<p>Immutable does <b>not</b> mean "you cannot attempt to change it." It means: <b>once created, an existing String object's content itself can never be altered</b>. If you try to modify a String's value (e.g. via concatenation), Java creates a <b>brand new object</b> with the new value — the original object remains unchanged and untouched.</p>
+</div>
+
+<div class="card">
+<b>Reassignment Needed to "See" the Modified Value</b>
+<p>Since modifying a String actually creates a new object rather than changing the original, if you don't <b>reassign</b> the reference variable to point to that new object, the reference still points to the old (unchanged) object — so printing it will still show the original value.</p>
+</div>
+
+<div class="card">
+<b>Comparing References with ==</b>
+<p><code>==</code> checks whether two references point to the <b>same object address</b> in memory — not whether their content is equal. Two String literals with identical content will return <code>true</code> with <code>==</code> (because SCP deduplication means they point to the same object); two Strings with different content (or created differently) may return <code>false</code> even if a human would consider them related.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Private constructor — restricts object creation to within the class:</b></p>
+<pre><code class="language-java">class Payment {
+
+    private String paymentRefId;
+    private int amount;
+    private String status;
+    private String response;
+
+    private Payment(String _refId, int _amount, String _status, String _response) {
+        paymentRefId = _refId;
+        amount = _amount;
+        status = _status;
+        response = _response;
+    }
+
+}</code></pre>
+<pre><code class="language-java">class Account {
+
+    public static void main(String[] args) {
+        Payment p = new Payment("REF1", 13400, "SUCCESS", "OK");
+        // ERROR: constructor Payment() has private access in Payment
+        // cannot create object from outside the class
+    }
+
+}</code></pre>
+
+<p><b>Refactoring: duplicate constructor logic moved to IIB:</b></p>
+<pre><code class="language-java">// BEFORE (duplicated in every constructor — not ideal)
+class Viewer {
+    public static int liveUsers = 0;
+
+    public Viewer() {
+        liveUsers = liveUsers + 1; // duplicated logic
+    }
+
+    public Viewer(String paymentRef) {
+        liveUsers = liveUsers + 1; // duplicated logic
+    }
+}
+
+// AFTER (moved to IIB — runs automatically for every constructor)
+class Viewer {
+    public static int liveUsers = 0;
+
+    {
+        liveUsers = liveUsers + 1; // shared setup, no duplication
+    }
+
+    public Viewer() {
+    }
+
+    public Viewer(String paymentRef) {
+    }
+}</code></pre>
+
+<p><b>Creating Strings — literal vs new, and SCP deduplication:</b></p>
+<pre><code class="language-java">String city = "Bangalore"; // literal — created in SCP (1st object)
+String india = "India";    // literal — created in SCP (2nd object)
+String c = "Bangalore";    // same content — reuses existing object, no new object created
+
+System.out.println(city == c); // true — both point to the same SCP object
+</code></pre>
+
+<p><b>Case sensitivity creates a separate object:</b></p>
+<pre><code class="language-java">String city = "Bangalore"; // capital B
+String c = "bangalore";    // lowercase b — different content
+
+System.out.println(city == c); // false — different objects, different addresses
+</code></pre>
+
+<p><b>Immutability — modifying a String creates a new object:</b></p>
+<pre><code class="language-java">String address = "BTM"; // object 1: "BTM" in SCP
+
+address = address + " Bangalore";
+// "BTM" itself is NOT modified — a NEW object "BTM Bangalore" is created
+// "address" is REASSIGNED to point to this new object
+
+System.out.println(address); // BTM Bangalore
+</code></pre>
+
+<p><b>Common misunderstanding — value not changing without reassignment:</b></p>
+<pre><code class="language-java">String address = "BTM";
+address.concat(" Bangalore"); // creates a new object, but result is NOT captured/assigned
+
+System.out.println(address); // still prints "BTM" — original object untouched,
+                              // new object created but nothing refers to it
+</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>In which scenario would you use a private constructor?</td><td>When you want to restrict object creation to only within that class itself — e.g. the Singleton design pattern, where only one instance should ever exist.</td></tr>
+<tr><td>Which approach for counting created objects is "correct" if both give the right output?</td><td>Moving the shared logic into IIB is the better approach — it avoids code duplication across multiple constructors, which matters greatly at scale (e.g. millions of object creations).</td></tr>
+<tr><td>Does immutable mean you can't even try to change a String?</td><td>No — you can attempt to modify it, but the original object stays unchanged; the attempt instead produces a brand new object, which you must capture/reference to actually use.</td></tr>
+<tr><td>Why does printing a String after calling a method like concat() sometimes show no change?</td><td>Because the method returns a new object with the modified value, but if that return value isn't reassigned to a variable, nothing refers to the new object — the original reference still points to the unchanged original.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>A private constructor restricts object creation to within the declaring class only.</li>
+<li>Prefer IIB over duplicating identical setup code across multiple constructors.</li>
+<li>String is a class (non-primitive), not a primitive data type.</li>
+<li>String literals are deduplicated in the SCP — identical content never creates a duplicate object.</li>
+<li>Java's case sensitivity means differently-cased strings are different content and get separate objects.</li>
+<li>String objects are immutable — any "modification" actually creates a new object; you must reassign to see the new value.</li>
+<li>== compares object references/addresses, not content — be careful not to confuse this with content equality (covered further with .equals() elsewhere).</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write examples creating multiple String literals with identical and different content; predict and verify how many objects get created in the SCP.</li>
+<li>Practice comparing String references using == and explain the result based on object addresses.</li>
+<li>Write an example demonstrating String immutability — attempt to modify a String without reassigning, then with reassigning, and compare the printed results.</li>
+<li>Refactor any earlier practice program with duplicated constructor logic to use an IIB instead.</li>
+<li>Draw out heap + SCP diagrams by hand for a few String examples to reinforce the memory model.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Constructor chaining, static and instance initialization blocks</li>
+<li><b>Upcoming Topics:</b> Strings will continue for several more classes — creating Strings using new keyword, and other String behaviors</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive live classroom debugging/tracing narration was summarized into the relevant concept cards and code examples rather than transcribed in full.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

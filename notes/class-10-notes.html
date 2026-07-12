@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 10</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 10 — Introduction to Methods</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Why we write code — performing tasks/work</li>
+<li>What a method is and its components: name, return type, access modifier, static, parameters</li>
+<li>Method naming convention (camelCase, meaningful names)</li>
+<li>Return type — what a method sends back to its caller</li>
+<li>Access modifiers (brief mention): public, private, protected, default</li>
+<li>Parameters — input supplied to a method</li>
+<li>Declaring a method vs calling a method</li>
+<li>Why a method does not execute unless explicitly called</li>
+<li>Calling a static method using ClassName.methodName()</li>
+<li>Full example: addNumbers method with command line input</li>
+<li>Why storing results in variables improves readability</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Why We Write Methods</b>
+<p>Code is written to perform tasks — e.g. placing an order, sending money, calculating a discount. Logic for a task should be written <b>inside a method</b>, not directly inside <code>main</code>. Even printing "Hello" happens inside a method (main is just one example of a method).</p>
+</div>
+
+<div class="card">
+<b>Components of a Method</b>
+<ul>
+<li><b>Name</b> — meaningful, camelCase (e.g. <code>fundTransfer</code>, <code>sendEmail</code>)</li>
+<li><b>Return type</b> — what the method sends back once its work is done</li>
+<li><b>Access modifier</b> — who can call/use the method: public, private, protected, or default (no modifier)</li>
+<li><b>static (optional)</b> — if present, the method belongs to the class and can be called using the class name, without creating an object</li>
+<li><b>Parameters</b> — input values supplied to the method to do its work</li>
+<li><b>Body</b> — the actual logic, enclosed in curly braces</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Return Type</b>
+<p>Once a method finishes its work, it can send a result back to whoever called it — this is the <b>return type</b>. Example: a "place order" method might return a String confirmation message with an order ID.</p>
+</div>
+
+<div class="card">
+<b>Parameters</b>
+<p>Parameters are the <b>inputs</b> a method needs to do its job — similar to giving someone money and a quantity when asking them to "get coffee". A method can take zero, one, or multiple parameters, each with its own data type.</p>
+</div>
+
+<div class="card">
+<b>Declaring vs Calling a Method</b>
+<p>Writing a method (declaring it) does <b>not</b> make it run. A method only executes when it is explicitly <b>called</b> by someone — either JVM (for <code>main</code>) or another method calling it. If nothing calls a method, its code never runs, even though the file compiles successfully.</p>
+</div>
+
+<div class="card">
+<b>Calling a Static Method</b>
+<p>Since static methods belong to the class, they are called using: <code>ClassName.methodName(arguments)</code>. This is the same reason JVM calls <code>main</code> as <code>ClassName.main()</code> — because <code>main</code> is static.</p>
+</div>
+
+<div class="card">
+<b>One Method Can Call Another</b>
+<p><code>main</code> doesn't have to do all the work itself — it can call other methods, and those methods can call further methods, similar to a contractor delegating different parts of a construction job to different vendors (painting, electrical, cement, etc.).</p>
+</div>
+
+<div class="card">
+<b>Why Store Results in Variables (Readability)</b>
+<p>Storing a method's return value in a variable before printing it (rather than nesting everything in one line) makes code more readable and maintainable — important since code may remain in use for many years. The local variable used for this is short-lived and removed once the method finishes executing, so it doesn't cause memory concerns.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Example: placeOrder method (returns a String)</b></p>
+<pre><code class="language-java">class Order {
+
+    public static void main(String[] args) {
+        String result = Order.placeOrder("iPhone 11", 5);
+        System.out.println(result);
+    }
+
+    static String placeOrder(String itemName, int quantity) {
+        System.out.println("Placing order for item " + itemName);
+        return "Order has been placed, your order ID is AMJ12345";
+    }
+
+}</code></pre>
+
+<p><b>Example: addNumbers using command line arguments and a helper method</b></p>
+<pre><code class="language-java">class AddNumbers {
+
+    public static void main(String[] args) {
+        System.out.println("Start");
+
+        String input1 = args[0];
+        String input2 = args[1];
+
+        int number1 = Integer.parseInt(input1);
+        int number2 = Integer.parseInt(input2);
+
+        int result = AddNumbers.add(number1, number2);
+
+        System.out.println("Sum of two numbers is " + result);
+
+        System.out.println("End");
+    }
+
+    static int add(int firstNumber, int secondNumber) {
+        int sum = firstNumber + secondNumber;
+        return sum;
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java AddNumbers 12 14</code></pre>
+
+<p><b>What happens if a method is declared but never called (no output produced):</b></p>
+<pre><code class="language-java">class AddNumbers {
+
+    public static void main(String[] args) {
+        System.out.println("Start");
+        System.out.println("End");
+        // add() method exists elsewhere in the class but is never called here — it will not run
+    }
+
+    static int add(int firstNumber, int secondNumber) {
+        int sum = firstNumber + secondNumber;
+        return sum;
+    }
+
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Why did nothing happen when the placeOrder method was written but the program was run?</td><td>Because the method was never called — writing a method doesn't execute it; something must explicitly call it.</td></tr>
+<tr><td>Who calls the main method?</td><td>JVM calls it, using ClassName.main(), because main is static.</td></tr>
+<tr><td>Why use ClassName.methodName() to call a static method instead of just methodName()?</td><td>Both work (the compiler adds the class name automatically), but explicitly writing the class name improves readability and clarity.</td></tr>
+<tr><td>Does storing intermediate results in local variables (like sum) waste memory?</td><td>No — local variables are removed once the method finishes executing; the readability benefit outweighs any negligible short-term memory use.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Avoid writing business logic directly inside the main method — write it inside separate, purposefully named methods.</li>
+<li>A method must be called to execute; simply declaring it and compiling successfully does not run its code.</li>
+<li>Static methods are called using ClassName.methodName(); this avoids needing to create an object (object creation not yet covered at this point).</li>
+<li>Give methods meaningful, camelCase names describing what they do.</li>
+<li>Always specify a proper return type — don't rely only on void when a method is expected to return a result.</li>
+<li>Never assume — verify your understanding/approach (e.g. with a manager/lead) before investing significant time in an implementation.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write a class with an addNumbers-style method: take two numbers via command line arguments, perform the addition inside a separate method (not in main), return the integer result, and print it from main.</li>
+<li>Write one additional method of your own choice (not addition), with a proper return type (not void), call it from main, and print the result.</li>
+<li>Practice tracing the full execution flow: JVM → main → method call → return → back to main → print.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Operators (assignment, relational, logical) and if-else</li>
+<li><b>Upcoming Topics:</b> Access modifiers in depth (public, private, protected, default); object creation (needed to call non-static methods)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. Motivational/career-advice discussion and class-test logistics at the end of the session were excluded as non-technical content. No new technical content was added.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

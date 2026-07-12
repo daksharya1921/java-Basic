@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 13</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 13 — Control Flow: if, else-if, else & Multiple Conditions</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Recap: access modifiers control visibility between classes</li>
+<li>What control flow is and why every application needs it</li>
+<li>if-else with a single condition (recap)</li>
+<li>Handling multiple conditions using if / else-if / else chains</li>
+<li>Only one block executes per run, even with multiple conditions</li>
+<li>Boundary/corner cases — importance of &gt;= and &lt;= vs &gt; and &lt;</li>
+<li>Always use curly braces for if/else blocks, even for single statements</li>
+<li>Unreachable code after a return statement</li>
+<li>Practice: travel mode decision, income category classification</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Access Modifiers — Quick Recap</b>
+<p>Access modifiers control <b>visibility</b> — i.e. which other classes can access a given method/variable. Example: a method that saves sensitive card details (e.g. inside a <code>CreditCardProcess</code> class) should be <b>private</b> so no other class can call it directly, for security reasons.</p>
+</div>
+
+<div class="card">
+<b>What is Control Flow?</b>
+<p>Control flow lets a program make <b>decisions</b> based on conditions — every application constantly evaluates conditions (e.g. "if order value ≥ 350, free delivery"; "if marks &gt; 60%, allow placement"). Without control flow, no meaningful application logic can be written.</p>
+</div>
+
+<div class="card">
+<b>Condition vs Business Logic</b>
+<p>In an if statement, the part inside parentheses is the <b>condition</b> being checked; the code inside the block that runs when the condition is true is the <b>business logic</b>.</p>
+</div>
+
+<div class="card">
+<b>Unreachable Code After Return</b>
+<p>Once a method hits a <code>return</code> statement, execution exits the method immediately. Any code written after the return statement (in the same method, same path) is <b>unreachable</b> and causes a compiler error: <em>unreachable statement</em>.</p>
+</div>
+
+<div class="card">
+<b>Handling Multiple Conditions — else if</b>
+<p>A simple if-else handles only two outcomes. For more than two possible outcomes, use a chain of <code>if / else if / else if / ... / else</code>. At runtime, conditions are checked <b>top to bottom</b>; as soon as one condition is true, its block executes and <b>all remaining conditions are skipped</b> — only one block ever executes per run.</p>
+</div>
+
+<div class="card">
+<b>else as the Default/Fallback</b>
+<p>The final <code>else</code> (with no condition) acts as a fallback — it executes only if <b>none</b> of the preceding if/else-if conditions were true.</p>
+</div>
+
+<div class="card">
+<b>Boundary (Corner) Cases</b>
+<p>Boundary cases are edge values exactly at a threshold (e.g. exactly ₹10,000 or exactly ₹5,000). Using <code>&gt;</code> instead of <code>&gt;=</code> (or <code>&lt;</code> instead of <code>&lt;=</code>) can incorrectly exclude these edge values from the intended range. Always check the requirement carefully to decide whether boundary values should be included.</p>
+</div>
+
+<div class="card">
+<b>Always Use Curly Braces</b>
+<p>Even for a single-statement if/else body, always wrap it in curly braces <code>{ }</code>. Without braces, only the <b>very next line</b> is treated as part of the conditional block — any additional line added later (e.g. to also send an email) will run <b>unconditionally</b>, regardless of the condition, which is a common and dangerous bug.</p>
+</div>
+
+<div class="card">
+<b>Developer Role vs User Role</b>
+<p>While writing and compiling code, you are the "developer." Once you run the program and supply input, you become the "user" supplying real input — this is a useful mental shift when testing your own programs (e.g. via command line arguments).</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Single condition — checking delivery eligibility:</b></p>
+<pre><code class="language-java">class ControlFlow {
+
+    public static void main(String[] args) {
+        int amount = Integer.parseInt(args[0]);
+        boolean result = ControlFlow.checkFreeDelivery(amount);
+        System.out.println("Customer delivery status: " + result);
+    }
+
+    private static boolean checkFreeDelivery(int amount) {
+        boolean status = false;
+
+        if (amount >= 10000) {
+            status = true;
+        } else {
+            status = false;
+        }
+
+        return status;
+    }
+
+}</code></pre>
+
+<p><b>Multiple conditions — travel decision using if / else-if / else:</b></p>
+<pre><code class="language-java">class TravelDecision {
+
+    public static void main(String[] args) {
+        int amount = Integer.parseInt(args[0]);
+        TravelDecision.takeDecision(amount);
+    }
+
+    private static void takeDecision(int amount) {
+        if (amount >= 10000) {
+            System.out.println("User will go by flight");
+        } else if (amount < 10000 && amount >= 5000) {
+            System.out.println("User will go by train");
+        } else if (amount < 5000 && amount >= 1000) {
+            System.out.println("User will go by bus");
+        } else {
+            System.out.println("User does not feel like going");
+        }
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java TravelDecision 12000
+java TravelDecision 8000
+java TravelDecision 500</code></pre>
+
+<p><b>Practice exercise — income category classification:</b></p>
+<pre><code class="language-java">package com.codewala;
+
+class IncomeCategory {
+
+    public static void main(String[] args) {
+        int yearlyIncome = Integer.parseInt(args[0]);
+        IncomeCategory.checkIncomeCategory(yearlyIncome);
+    }
+
+    private static void checkIncomeCategory(int yearlyIncome) {
+        if (yearlyIncome < 200000) {
+            System.out.println("Category: BPL");
+        } else if (yearlyIncome >= 200000 && yearlyIncome < 1000000) {
+            System.out.println("Category: Middle Class");
+        } else if (yearlyIncome >= 1000000 && yearlyIncome < 10000000) {
+            System.out.println("Category: Upper Middle Class");
+        } else {
+            System.out.println("Category: High Net-worth Individual");
+        }
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java com.codewala.IncomeCategory 1500000</code></pre>
+
+<p><b>Why curly braces matter — bug example:</b></p>
+<pre><code class="language-java">// WITHOUT braces — dangerous:
+if (amount >= 10000)
+    System.out.println("Eligible");
+    sendEmail(); // ⚠ this line ALWAYS runs, regardless of the condition!
+
+// WITH braces — correct:
+if (amount >= 10000) {
+    System.out.println("Eligible");
+    sendEmail(); // only runs when condition is true
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>If none of the if/else-if conditions are true, what happens?</td><td>The final else block executes, acting as a default/fallback.</td></tr>
+<tr><td>Do all conditions get checked even after one is found true?</td><td>No — as soon as one condition evaluates true, its block runs and all remaining conditions are skipped entirely.</td></tr>
+<tr><td>What happens if a boundary value (e.g. exactly 10,000) isn't handled with &gt;= or &lt;=?</td><td>It gets excluded from the intended range — always verify boundary conditions match the actual requirement.</td></tr>
+<tr><td>Why did the program throw an "array index out of bounds" error?</td><td>No command line argument was supplied when running the program, so args[0] didn't exist — this is a runtime exception, not a compile-time error.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Only one block in an if/else-if/else chain executes per run — never assume multiple blocks run together.</li>
+<li>Always double-check boundary values (&gt;= vs &gt;, &lt;= vs &lt;) against the actual requirement.</li>
+<li>Always use curly braces for if/else bodies, even single-line ones, to avoid silent logic bugs later.</li>
+<li>Give classes and methods names that accurately reflect their purpose (e.g. a class named "JomatoOrder" should not contain unrelated logic like checking marks).</li>
+<li>Use packages for all classes going forward, as covered in the previous class.</li>
+<li>Method return types must match what's actually being returned — e.g. don't return double/int when the output is meant to be a category label (String).</li>
+<li>Business logic belongs inside methods, called from main — not written directly inside main.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write a program using if-else with a single condition (own use case, not delivery/eligibility examples already covered).</li>
+<li>Write a program using if / else-if / else with at least 3–4 conditions.</li>
+<li>Build the income category classification program: BPL (&lt; 2L), Middle Class (2L–10L), Upper Middle Class (10L–1Cr), High Net-worth Individual (&gt; 1Cr), using command line input for yearly income.</li>
+<li>Test all programs against boundary values to confirm correct range handling.</li>
+<li>Use packages for all new classes going forward.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Access Modifiers and Packages</li>
+<li><b>Upcoming Topics:</b> Class test (Friday testing schedule announced); transition to Eclipse IDE coming soon</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. Extensive individual student code-review/debugging chatter during the practice session was summarized into general common-mistake points rather than transcribed student-by-student. No new technical content was added.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

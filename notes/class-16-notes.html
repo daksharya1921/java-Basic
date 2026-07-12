@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 16</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 16 — Arrays, Break, Continue & Return — ⚠️ Middle Portion Missing</p>
+</div>
+
+<div class="note" style="margin:24px 40px;">
+<b>Heads up:</b> Only the <b>opening</b> (array intro question) and the <b>closing remarks</b> (on return) of this class have been shared so far. The actual explanations, syntax, and examples for arrays, break, and continue — the core of this class — are still missing from the middle. If you have that portion of the recording/transcript, send it and I'll fill this in properly; right now this file has real gaps.
+</div>
+
+<div class="section">
+<h2>🎯 Topics Planned for This Class</h2>
+<ul>
+<li>Arrays — introduction (opening captured; full explanation missing)</li>
+<li>break statement (mentioned as planned; content missing)</li>
+<li>continue statement (mentioned as planned; content missing)</li>
+<li>return statement (closing example captured)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts (From Available Transcript Only)</h2>
+
+<div class="card">
+<b>What is an Array? (opening only)</b>
+<p>The instructor opened by asking the class what an array is. The partial answer captured: an array is a <b>continuous block of memory</b> used to store something (elements). The full explanation, declaration syntax, and examples were not included in what was shared.</p>
+</div>
+
+<div class="card">
+<b>return — Exits the Method Immediately</b>
+<p>When a method hits a <code>return</code> statement, it <b>exits the method right there</b> — no further lines in that method execute afterward. The instructor illustrated this with a conditional-processing example (see below).</p>
+</div>
+
+<div class="card">
+<b>Example: return Used for Conditional Early Exit</b>
+<p>Scenario discussed: a customer provides contact details for notification.</p>
+<ul>
+<li>If a <b>phone number</b> is available → send a <b>WhatsApp message</b>, then <code>return</code> (exit the method — no need to also check email).</li>
+<li>If the phone number is <b>missing</b> → send an <b>email</b> instead, then <code>return</code>.</li>
+</ul>
+<p>This shows using <code>return</code> not just to send back a value, but to <b>stop further processing</b> once the right condition/branch has been handled — avoiding unnecessary checks afterward.</p>
+</div>
+
+<div class="card">
+<b>Broader Lesson: Choosing return / break / continue Deliberately</b>
+<p>The instructor emphasized this is a mindset to apply generally, not just in one exercise: before writing code, think about whether you need to let processing run <b>end-to-end</b>, or whether you should <b>exit early</b> once your goal is achieved — using <code>return</code> (exit method), <code>break</code> (exit loop/switch), or <code>continue</code> (skip to next loop iteration) as appropriate.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippet (Reconstructed From the Described Example)</h2>
+<p style="font-size:14px;color:#777;">Note: this is a reconstruction of the WhatsApp/email scenario as described verbally, since no actual code was shown in the shared transcript.</p>
+<pre><code class="language-java">private static void notifyCustomer(String phoneNumber, String email) {
+    if (phoneNumber != null && !phoneNumber.isEmpty()) {
+        System.out.println("Sending WhatsApp message to " + phoneNumber);
+        return; // exit — no need to also send email
+    }
+
+    if (email != null && !email.isEmpty()) {
+        System.out.println("Sending email to " + email);
+        return; // exit after handling email
+    }
+
+    System.out.println("No contact method available");
+}</code></pre>
+</div>
+
+<div class="section">
+<h2>📌 Note on Coverage</h2>
+<ul>
+<li>This file currently only contains: the opening array question, and the closing discussion on <code>return</code>.</li>
+<li><b>Missing:</b> full array explanation (declaration, indexing, examples), and the break/continue explanations with examples — these were explicitly mentioned as planned topics but weren't included in what's been shared.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Next Steps</h2>
+<ul>
+<li>If you have the middle portion of this class's recording/transcript (covering arrays, break, and continue in detail), send it and I'll complete Class 16 properly.</li>
+<li>Otherwise, send the next class's transcript and I'll continue as Class 17 — if arrays/break/continue get revisited there, I'll fold that content in.</li>
+</ul>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+</body>
+</html>

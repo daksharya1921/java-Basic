@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 01 — println Syntax | Java Backend Notes</title>
+<style>
+  :root{
+    --bg:#FAF8F4;
+    --ink:#1F2430;
+    --muted:#6B7280;
+    --topics:#4F46E5;
+    --concepts:#8B5CF6;
+    --code:#0F172A;
+    --code-accent:#4ADE80;
+    --doubts:#F59E0B;
+    --important:#F43F5E;
+    --actions:#10B981;
+    --connects:#0D9488;
+    --card-bg:#FFFFFF;
+    --border:#ECE9E2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+    padding:24px 16px 64px;
+  }
+  .wrap{max-width:720px;margin:0 auto;}
+  header{
+    margin-bottom:28px;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--topics);
+    background:#EEF2FF;
+    padding:4px 10px;
+    border-radius:20px;
+    margin-bottom:10px;
+  }
+  h1{
+    font-size:26px;
+    margin:0 0 4px;
+    font-weight:800;
+    letter-spacing:-0.01em;
+  }
+  .subtitle{color:var(--muted);font-size:14px;}
+
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-left:5px solid var(--accent);
+    border-radius:12px;
+    padding:18px 20px;
+    margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(0,0,0,0.03);
+  }
+  .card h2{
+    margin:0 0 10px;
+    font-size:16px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--accent);
+  }
+  .card ul{margin:0;padding-left:20px;}
+  .card li{margin-bottom:6px;}
+  .card p{margin:0 0 8px;}
+
+  .topics{--accent:var(--topics);}
+  .concepts{--accent:var(--concepts);}
+  .doubts{--accent:var(--doubts);}
+  .important{--accent:var(--important);}
+  .actions{--accent:var(--actions);}
+  .connects{--accent:var(--connects);}
+
+  .codecard{
+    background:var(--code);
+    border-radius:12px;
+    padding:18px 20px;
+    margin-bottom:16px;
+    color:#E2E8F0;
+  }
+  .codecard h2{
+    margin:0 0 10px;
+    font-size:16px;
+    font-weight:700;
+    color:var(--code-accent);
+  }
+  pre{
+    background:#0B1120;
+    border-radius:8px;
+    padding:14px;
+    overflow-x:auto;
+    margin:0;
+    font-size:13.5px;
+  }
+  code{
+    font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    color:#93C5FD;
+  }
+  .comment{color:#6B7280;}
+
+  mark{
+    background:#FEF3C7;
+    padding:0 3px;
+    border-radius:3px;
+  }
+  .badge{
+    display:inline-block;
+    background:#FEE2E2;
+    color:var(--important);
+    font-size:12px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:6px;
+    margin-top:8px;
+  }
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    margin-top:32px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">Java Backend · Codewala</span>
+    <h1>📅 Class 01 — Introduction to <code style="background:#EEF2FF;color:var(--topics);padding:2px 6px;border-radius:4px;">println</code> Syntax</h1>
+    <div class="subtitle">Zoom transcript summary</div>
+  </header>
+
+  <div class="card topics">
+    <h2>🎯 Topics Covered</h2>
+    <ul>
+      <li>Correct syntax for printing output in Java (<code style="background:#EEF2FF;color:var(--topics);padding:2px 5px;border-radius:4px;">println</code>, not "print in" or "printLN")</li>
+    </ul>
+  </div>
+
+  <div class="card concepts">
+    <h2>🧠 Key Concepts</h2>
+    <ul>
+      <li>The method for printing to console in Java is <strong>println</strong> — a single word, not "print" + "in" or "print LN"</li>
+      <li>Common misreading flagged in class: there's no letter <mark>I</mark> in it — it's <mark>L</mark> (as in "print<strong>l</strong>n", from "print line")</li>
+    </ul>
+  </div>
+
+  <div class="codecard">
+    <h2>💻 Code Snippets / Examples</h2>
+    <pre><code>System.out.println("Hello, World!"); <span class="comment">// correct method name: println (no "I", uses "L")</span></code></pre>
+  </div>
+
+  <div class="card doubts">
+    <h2>❓ Doubts / Questions Raised</h2>
+    <ul>
+      <li>A student misread/mispronounced <code style="background:#FEF3C7;color:#92400E;padding:2px 5px;border-radius:4px;">println</code> as "print in" — instructor corrected it</li>
+      <li><strong>Q:</strong> "Should we ask doubts in the next class, or is there a fixed schedule?"<br>
+      <strong>A:</strong> One class will be held each day; questions can be asked accordingly</li>
+    </ul>
+  </div>
+
+  <div class="card important">
+    <h2>📌 Important Points / Common Mistakes</h2>
+    <ul>
+      <li>Common mistake: confusing "print in" or misreading the method name — it's <strong>println</strong>, with an <strong>L</strong>, not an <strong>I</strong></li>
+    </ul>
+  </div>
+
+  <div class="card actions">
+    <h2>✅ Action Items / Homework</h2>
+    <ul>
+      <li>Keep practicing and focus on understanding <strong>basic computer functionality</strong></li>
+    </ul>
+  </div>
+
+  <div class="card connects">
+    <h2>🔗 Connects To</h2>
+    <p>Not mentioned in this transcript.</p>
+    <span class="badge">⚠ Low technical content — see note below</span>
+  </div>
+
+  <footer>Auto-generated study notes · Class 01</footer>
+</div>
+</body>
+</html>

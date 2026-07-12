@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 05</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 05 — JDK, JRE, JVM, JIT Compiler & Command Line Arguments</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>JDK (Java Development Kit) and its purpose</li>
+<li>JRE (Java Runtime Environment) and its purpose</li>
+<li>Where inbuilt classes (String, System, Scanner, etc.) come from — rt.jar</li>
+<li>What a JAR file is</li>
+<li>JDK vs JRE — what gets installed on development vs testing/production machines</li>
+<li>JVM as a virtual machine/process — start and shutdown lifecycle</li>
+<li>Bytecode, Interpreter, and Just-In-Time (JIT) Compiler</li>
+<li>Why hardcoding should be avoided</li>
+<li>Using command line arguments instead of hardcoding</li>
+<li>Converting String input to int using Integer.parseInt()</li>
+<li>Naming convention recap (class, method, variable)</li>
+<li>Handling spaces in command line arguments using double quotes</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>JDK — Java Development Kit</b>
+<p>JDK provides the <b>compiler</b> (<code>javac</code>). Without JDK, you cannot compile a Java program. When you install Java, you get JDK, and JDK internally includes JRE as well.</p>
+</div>
+
+<div class="card">
+<b>JRE — Java Runtime Environment</b>
+<p>JRE provides the <b>runtime environment</b> needed to run (execute) a Java program. It supplies supporting/inbuilt classes such as <code>String</code>, <code>System</code>, and <code>Scanner</code>, which are part of the JRE's library — bundled inside a file called <b>rt.jar</b>.</p>
+</div>
+
+<div class="card">
+<b>What is a JAR file?</b>
+<p>JAR stands for <b>Java Archive</b> — similar to a ZIP file, it bundles many compiled <code>.class</code> files together into one file. <code>rt.jar</code> (runtime jar) contains most of the general-purpose classes needed to run a Java program, organized into packages (e.g. <code>java.lang</code> contains common classes like <code>String</code> and <code>System</code>).</p>
+</div>
+
+<div class="card">
+<b>JDK vs JRE — Where Each is Installed</b>
+<p>On a <b>development machine</b>, JDK is required (since code needs to be compiled). On a <b>QA/testing or production machine</b>, only <b>JRE</b> is required — since that team only runs the already-compiled code, they don't need the compiler.</p>
+<ul>
+<li><b>JDK</b> → required for <b>development</b> (compiling code)</li>
+<li><b>JRE</b> → required for <b>testing/running</b> (executing code)</li>
+</ul>
+</div>
+
+<div class="card">
+<b>JVM — Java Virtual Machine</b>
+<p>Unlike JDK and JRE (which are physical/installable), JVM is a <b>virtual machine — a process</b> that starts only when you run a program (via the <code>java</code> command). It occupies memory (MetaSpace, Heap, Stack), loads the required class, executes the program, and once the main method finishes, JVM <b>shuts down</b> and releases all occupied memory.</p>
+</div>
+
+<div class="card">
+<b>Bytecode, Interpreter & JIT Compiler</b>
+<p>When a Java program runs, the class is loaded as <b>bytecode</b> (not directly understood by the computer/hardware — only native machine code is). Inside JVM, there is an <b>interpreter</b> and a <b>Just-In-Time (JIT) compiler</b> that work together to convert bytecode into native machine code.</p>
+<ul>
+<li>The <b>interpreter</b> converts and executes code <b>line by line</b>.</li>
+<li>For <b>repeated code</b> (e.g. a loop running thousands of times), the <b>JIT compiler</b> optimizes execution instead of interpreting the same line repeatedly — this <b>improves performance</b> for frequently executed code.</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Why Avoid Hardcoding</b>
+<p>Hardcoding means directly writing fixed values into code (e.g. <code>int interestRate = 5;</code>). This is a bad practice because if the value needs to change later (e.g. interest rate becomes 6), the code must be modified, recompiled, tested (unit testing → QA → system integration testing → production) — a process that can take 15 days to a month, and risks introducing new bugs elsewhere in the system.</p>
+</div>
+
+<div class="card">
+<b>Command Line Arguments — Avoiding Hardcoding</b>
+<p>Instead of hardcoding values, input can be supplied from the command line while running the program, using <code>String[] args</code>. This makes the program flexible — values can change without modifying or recompiling the code.</p>
+</div>
+
+<div class="card">
+<b>Command Line Arguments are Always Strings</b>
+<p>All command line arguments are stored as <b>String</b>, even if you pass a number. So <code>args[0]</code> holding "1" is a string "1", not the integer 1. Using the <code>+</code> operator directly on string numbers performs <b>concatenation</b>, not addition (e.g. "1" + "1" gives "11", not 2).</p>
+</div>
+
+<div class="card">
+<b>Converting String to Integer</b>
+<p>To perform mathematical operations on command line input, convert the string to an integer using the built-in <code>Integer.parseInt()</code> method, which takes a String and returns an int.</p>
+</div>
+
+<div class="card">
+<b>Handling Spaces in Arguments</b>
+<p>Space is the separator between command line arguments. If a value itself contains a space (e.g. a full name), wrap it in double quotes so it is treated as a single argument instead of being split into two.</p>
+</div>
+
+<div class="card">
+<b>Naming Convention Recap</b>
+<p>Variable naming convention is the same as method naming convention — <b>camelCase</b> (first word lowercase, subsequent words capitalized). This applies consistently across class, method, and variable naming, each following their respective convention.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<pre><code class="language-java">class Employee {
+
+    public static void main(String[] args) {
+        System.out.println("Employee details");
+    }
+
+}</code></pre>
+
+<p><b>Extracting rt.jar contents (demonstrated via jar command):</b></p>
+<pre><code class="language-bash">jar xf rt.jar</code></pre>
+
+<p><b>Hardcoded version (bad practice):</b></p>
+<pre><code class="language-java">class AddNumbers {
+
+    public static void main(String[] args) {
+        int sum = 5 + 20; // hardcoded values
+        System.out.println(sum);
+    }
+
+}</code></pre>
+
+<p><b>Using command line arguments instead:</b></p>
+<pre><code class="language-java">class AddNumbers {
+
+    public static void main(String[] args) {
+        String firstNumberStr = args[0];
+        String secondNumberStr = args[1];
+
+        int firstNumber = Integer.parseInt(firstNumberStr);
+        int secondNumber = Integer.parseInt(secondNumberStr);
+
+        int sum = firstNumber + secondNumber;
+        System.out.println(sum);
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java AddNumbers 20 20</code></pre>
+
+<p><b>Handling a name with spaces:</b></p>
+<pre><code class="language-bash">java Employee "Pooja Academy"</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Is JDK required on the QA/testing machine?</td><td>No. Only JRE is required, since that machine only runs the code and doesn't compile it.</td></tr>
+<tr><td>Where do classes like String, System, Scanner come from if we didn't develop them?</td><td>They are inbuilt/predefined classes provided as part of JRE's library (rt.jar).</td></tr>
+<tr><td>Why does concatenating two command line number arguments give a wrong result (e.g. "20"+"20" = "2020")?</td><td>Command line arguments are stored as strings by default; the + operator on strings performs concatenation, not addition. Convert using Integer.parseInt() first.</td></tr>
+<tr><td>A student got an "index out of bounds" error — why?</td><td>The program was run without passing the required command line argument, so args[0] did not exist.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>JDK = development (has compiler); JRE = runtime (needed to execute code); both are physically installable, unlike JVM.</li>
+<li>JVM is a virtual machine/process — it starts when the program runs and shuts down once execution completes.</li>
+<li>Never hardcode values that are likely to change — use command line arguments instead.</li>
+<li>All command line arguments are received as String, even numbers — convert explicitly using Integer.parseInt() before doing math.</li>
+<li>Use double quotes to pass a value containing spaces as a single command line argument.</li>
+<li>Running a program that expects command line arguments without supplying them causes an index-out-of-bounds error.</li>
+<li>JIT compiler improves performance specifically for repeated/hot code paths, working alongside the interpreter.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write a program to print employee details (first name, last name, email, state, country) using command line arguments, following Java naming conventions.</li>
+<li>Practice passing command line arguments including values with spaces (using double quotes).</li>
+<li>Practice converting string command line input into integers using Integer.parseInt() and performing mathematical operations.</li>
+<li>Revise all topics covered this week and last week — announced: an online objective class test next Friday covering these topics.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Compilation, execution, public/static/void, method structure</li>
+<li><b>Upcoming Topics (mentioned by instructor):</b> Maven (build tool) and Git (code repository) — brief mention only, detailed lecture later; class test next Friday</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping of related points under labeled cards, and formatting/styling. No technical content was added beyond what the instructor taught. Motivational/attendance remarks from the instructor near the end of class were excluded as non-technical content.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

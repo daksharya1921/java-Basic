@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 12</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+.rankbox{display:flex;justify-content:space-between;background:#1e1e2f;color:#d4d4f7;padding:16px;border-radius:10px;font-family:monospace;text-align:center;margin-top:10px;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}.rankbox{flex-direction:column;gap:8px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 12 — Access Modifiers & Packages</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>What access modifiers control — who can call/use a class, variable, method, or constructor</li>
+<li>The four access modifiers: private, default, protected, public</li>
+<li>private — scope limited to the declaring class only</li>
+<li>What a package is and why it's needed (avoiding duplicate class name conflicts)</li>
+<li>Package naming convention (reverse of company domain)</li>
+<li>default (no modifier) — scope limited to the same package</li>
+<li>protected — same package + child classes in other packages (brief intro, full detail needs inheritance)</li>
+<li>public — accessible from anywhere</li>
+<li>Importing classes from another package</li>
+<li>draw.io — tool for creating diagrams to explain projects/designs</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>What Access Modifiers Control</b>
+<p>Access modifiers decide <b>who can call or use</b> a class, method, variable, or constructor — specifically, which <b>other classes</b> are allowed to access them. This gives a developer control over what should be exposed and what should stay hidden/protected within the code.</p>
+</div>
+
+<div class="card">
+<b>private — Scope: Within the Declaring Class Only</b>
+<p>A private member (method, variable, or constructor) can only be accessed <b>within the same class</b> where it is declared. Any other class — even in the same file — trying to call a private member gets a compiler error: <em>has private access in [ClassName]</em>.</p>
+</div>
+
+<div class="card">
+<b>Why Packages Exist</b>
+<p>In large systems (e.g. Amazon-scale applications), thousands of developers may independently create classes with the same name (e.g. <code>User.java</code>, <code>Account.java</code>) for different purposes (retail user, reseller user, business user). Since two files with the same name cannot exist in the same folder, Java uses <b>packages</b> — a folder/namespace structure — to organize classes and allow classes with the same name to coexist in different packages.</p>
+</div>
+
+<div class="card">
+<b>Package = Folder Structure / Namespace</b>
+<p>A package is essentially a folder that organizes related classes (this is called being <b>modular</b> — like organizing a house into a kitchen, bedroom, and living room instead of keeping everything in one open space). To uniquely identify a class, you combine its <b>package name + class name</b> — similar to using a person's name plus their father's name to distinguish between two people with the same first name.</p>
+</div>
+
+<div class="card">
+<b>Package Naming Convention</b>
+<p>By convention, a package name is the <b>reverse of the company's domain name</b>. Example: for a company with domain <code>codewala.com</code>, the package would start with <code>com.codewala</code>.</p>
+</div>
+
+<div class="card">
+<b>Declaring and Using Packages</b>
+<p>The first line of a Java file (when using packages) is the package declaration:</p>
+<pre><code class="language-java">package com.codewala;</code></pre>
+<p>The file must physically reside inside a matching folder structure (e.g. <code>com/codewala/Account.java</code>). Compilation and execution commands must reference the fully qualified path/package.</p>
+</div>
+
+<div class="card">
+<b>default (No Modifier) — Scope: Within the Same Package</b>
+<p>If no access modifier is written, the member gets <b>default access</b>. A default member can be accessed by <b>any other class within the same package</b>, but <b>not</b> from a class in a different package — even if that class imports it, compilation fails with an error like: <em>is not public in [package]; cannot be accessed from outside package</em>.</p>
+</div>
+
+<div class="card">
+<b>protected — Scope: Same Package + Child Classes in Other Packages</b>
+<p>Protected has the same visibility as default (same package), <b>plus</b> it can be accessed from a class in a <b>different package</b> if that class is a <b>child (subclass)</b> of the class where the member is declared. Full understanding of this requires <b>inheritance</b>, which is an upcoming topic.</p>
+</div>
+
+<div class="card">
+<b>public — Scope: Accessible from Anywhere</b>
+<p>A public member can be accessed from <b>any class, in any package</b> — the widest possible visibility.</p>
+</div>
+
+<div class="card">
+<b>Access Modifier Visibility Ranking (Narrowest to Widest)</b>
+<div class="rankbox">
+<div>🔒 private<br><small>class only</small></div>
+<div>📦 default<br><small>package only</small></div>
+<div>🌐 protected<br><small>package + child classes</small></div>
+<div>🌍 public<br><small>everywhere</small></div>
+</div>
+</div>
+
+<div class="card">
+<b>Importing Classes from Another Package</b>
+<p>To use a class from a different package, it must be <b>imported</b> using an <code>import</code> statement — similar to importing a product from another country before it can be used domestically.</p>
+<pre><code class="language-java">import com.codewala.Account;</code></pre>
+</div>
+
+<div class="card">
+<b>Class Access Modifier vs Member Access Modifier</b>
+<p>A class itself can be marked public or default. Even if a class is public (callable from outside its package), the individual methods/members inside it still follow their own access modifiers — a private method inside a public class still cannot be called from outside that class.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>private — accessible only within the same class:</b></p>
+<pre><code class="language-java">class Account {
+
+    public static void main(String[] args) {
+        Account.accountInfo(); // works — called within the same class
+    }
+
+    private static void accountInfo() {
+        System.out.println("Displaying account info");
+    }
+
+}</code></pre>
+
+<p><b>private — fails when called from a different class:</b></p>
+<pre><code class="language-java">class AccountStatus {
+
+    public static void main(String[] args) {
+        Account.accountInfo(); // ERROR: accountInfo() has private access in Account
+    }
+
+}</code></pre>
+
+<p><b>Package declaration and folder structure:</b></p>
+<pre><code class="language-java">package com.codewala;
+
+class Account {
+
+    public static void main(String[] args) {
+        System.out.println("Account class in com.codewala package");
+    }
+
+}</code></pre>
+<pre><code class="language-bash">// Compile (from the folder containing "com")
+javac com/codewala/Account.java
+
+// Run
+java com.codewala.Account</code></pre>
+
+<p><b>Same class name in two different packages (no conflict):</b></p>
+<pre><code class="language-java">// File: com/codewala/Account.java
+package com.codewala;
+class Account { }
+</code></pre>
+<pre><code class="language-java">// File: com/tcs/Account.java
+package com.tcs;
+class Account { }
+</code></pre>
+
+<p><b>default access — accessible within same package:</b></p>
+<pre><code class="language-java">package com.codewala;
+
+class AccountStatus {
+
+    static void doSomething() { // default access — no modifier
+        System.out.println("Do something else");
+    }
+
+}
+</code></pre>
+<pre><code class="language-java">package com.codewala;
+
+class Account {
+
+    public static void main(String[] args) {
+        AccountStatus.doSomething(); // works — same package
+    }
+
+}</code></pre>
+
+<p><b>default access — fails from a different package:</b></p>
+<pre><code class="language-java">package com.tcs;
+
+import com.codewala.AccountStatus;
+
+class AccountManagement {
+
+    public static void main(String[] args) {
+        AccountStatus.doSomething();
+        // ERROR: doSomething() is not public in com.codewala.AccountStatus;
+        // cannot be accessed from outside package
+    }
+
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>What does "private members are not visible outside the class" actually mean?</td><td>It means another class cannot call/access that member — "visibility" here refers to whether one class can access a member of another class, not literal visual visibility.</td></tr>
+<tr><td>Do you need to import a class before using it from another package?</td><td>Yes — any class not in the current file/package must be imported first, similar to importing a product from another country before using it domestically.</td></tr>
+<tr><td>Two classes have the same name in different packages — how do you refer to the correct one?</td><td>By prefixing the package name before the class name (e.g. com.codewala.Account vs com.tcs.Account) — similar to using a father's name to distinguish two people with the same first name.</td></tr>
+<tr><td>If a class is public but a method inside it is private, can the method be called from outside?</td><td>No — the class being public only controls whether the class itself is accessible from outside the package; each member still follows its own access modifier.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Access modifiers control visibility between classes, not literal code visibility.</li>
+<li>private = narrowest (class only); default = package only; protected = package + child classes; public = widest (everywhere).</li>
+<li>Two classes cannot share the same name within the same package/folder — packages solve this by allowing the same class name in different namespaces.</li>
+<li>Package declaration must be the first line in the Java file, and the physical folder structure must match the package name.</li>
+<li>A class being public doesn't override the access modifiers of its individual members.</li>
+<li>Use draw.io to create architecture/flow diagrams — useful for explaining projects in interviews and at work.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Create a class with a private method, call it within the same class (should work), then try calling it from a different class (should fail) — observe the compiler error.</li>
+<li>Create two classes in the same package where one calls a default-access method of the other — should work.</li>
+<li>Move one of those classes to a different package and try the same call — should fail with a "not public" error; fix it by understanding what changes are required.</li>
+<li>Practice compiling and running classes that use package declarations, including the correct javac and java commands with fully qualified names.</li>
+<li>Explore draw.io and try creating a simple diagram representing today's practice exercises.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Modular methods and calling one method from another</li>
+<li><b>Upcoming Topics:</b> Inheritance (needed to fully understand protected access); Eclipse/IDE setup (mentioned as coming in about 7 more days)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, formatting/styling, and the visual access-modifier ranking box. No new technical content was added beyond what the instructor taught. Extensive live troubleshooting/compilation debugging narration was summarized into concise code examples showing the same working vs failing scenarios.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

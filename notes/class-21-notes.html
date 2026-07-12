@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 21</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 21 — String via new Keyword, == vs equals(), and Object Identity</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Recap: String literal always goes to String Constant Pool (SCP), with deduplication</li>
+<li>Creating Strings using new keyword — creates two objects (SCP + heap)</li>
+<li>new keyword never checks for duplicates in the heap (unlike SCP)</li>
+<li>Concatenation (CONCAT) result goes to the heap, not SCP</li>
+<li>Reassignment required to actually use a modified/new String value</li>
+<li>== operator — compares memory addresses (references)</li>
+<li>equals() method — defined in the Object class, default behavior same as ==</li>
+<li>String class overrides equals() to compare content instead of reference</li>
+<li>Why Java allows both literal and new keyword — content vs identity use cases</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Recap: String Literal → Always SCP, With Deduplication</b>
+<p>Anything written in double quotes is a literal and always results in (or reuses) an object in the <b>String Constant Pool</b>. Before creating a new one, Java checks whether an object with the exact same content already exists there — if so, it reuses it instead of creating a duplicate.</p>
+</div>
+
+<div class="card">
+<b>Creating a String with new — Creates TWO Objects</b>
+<pre><code class="language-java">String s1 = new String("Bangalore");</code></pre>
+<p>This line does two things:</p>
+<ol>
+<li>The literal <code>"Bangalore"</code> inside the parentheses is still a literal → one object is created (or reused) in the <b>SCP</b>.</li>
+<li>The <code>new</code> keyword then creates a <b>separate, brand-new object</b> in the <b>Heap</b>, using that content — and <code>s1</code> refers to <b>this heap object</b>, not the SCP one.</li>
+</ol>
+<p>So a single <code>new String("...")</code> statement typically creates <b>2 objects total</b> (assuming the SCP one didn't already exist).</p>
+</div>
+
+<div class="card">
+<b>new Keyword Never Deduplicates in the Heap</b>
+<p>Unlike the SCP, object creation via <code>new</code> in the <b>heap never checks</b> whether an identical object already exists — it <b>always creates a brand-new object</b>, every single time, regardless of duplicate content elsewhere in the heap.</p>
+</div>
+
+<div class="card">
+<b>Concatenation (CONCAT) Result Goes to the Heap</b>
+<p>When you modify a String (e.g. using <code>.concat()</code>), the resulting new object is placed in the <b>heap</b>, not the SCP — even though the original string may have come from the SCP. The original object in the SCP remains unchanged (immutability).</p>
+</div>
+
+<div class="card">
+<b>Reassignment Needed to Use the New Value</b>
+<p>If you call a method like <code>.concat()</code> but don't <b>reassign</b> the result back to a variable, nothing refers to the newly created object — the original reference still points to the old, unmodified value.</p>
+</div>
+
+<div class="card">
+<b>== Operator — Compares Memory Addresses</b>
+<p><code>==</code> checks whether two references point to the <b>exact same object</b> in memory (same address) — not whether their content matches. Always draw out the memory diagram (SCP/heap, addresses) when unsure, rather than guessing based on displayed values.</p>
+</div>
+
+<div class="card">
+<b>equals() — Defined in the Object Class</b>
+<p>The <code>equals()</code> method exists in the <b>Object class</b> — the universal parent of every Java class. By <b>default</b>, <code>equals()</code> behaves exactly like <code>==</code>: it compares memory addresses/references, <b>not</b> content. Every class inherits this default behavior unless it explicitly changes it.</p>
+</div>
+
+<div class="card">
+<b>String Class Overrides equals() to Compare Content</b>
+<p>The String class <b>overrides</b> (changes) the default <code>equals()</code> behavior inherited from Object — instead of comparing memory addresses, String's <code>equals()</code> compares the actual <b>content/characters</b> of the two strings. This is why <code>"abc".equals("abc")</code> returns true even if they're different objects with different addresses.</p>
+</div>
+
+<div class="card">
+<b>equals() Behavior is Not Universal — It Depends on the Class</b>
+<p>Only classes that specifically override <code>equals()</code> (like String) compare content. For a plain custom class (e.g. <code>Employee</code>) with no overridden <code>equals()</code>, calling <code>.equals()</code> falls back to the Object class's default — comparing memory addresses, just like ==.</p>
+</div>
+
+<div class="card">
+<b>Why Both Literal and new Exist — Content vs Identity</b>
+<p>If Java only allowed literals, you could never have <b>multiple distinct objects with identical content</b> — but some real use cases genuinely need this. Example: tracking the same value at different points/locations (identity matters more than content) — e.g. representing the same person's data as they move between locations, where each snapshot needs to be a <b>separate, distinct object</b> even though the content might be the same. The <code>new</code> keyword supports this "identity matters" use case; literals support the more common "content/value matters, avoid duplication" use case.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>String via new keyword — creates 2 objects:</b></p>
+<pre><code class="language-java">String s1 = new String("Bangalore");
+// Object 1: "Bangalore" created/reused in SCP (from the literal argument)
+// Object 2: new "Bangalore" object created in the Heap
+// s1 refers to the HEAP object, not the SCP one</code></pre>
+
+<p><b>new never deduplicates — repeated calls always create new heap objects:</b></p>
+<pre><code class="language-java">String s10 = "Mumbai";           // SCP object created (1st time)
+String s11 = "Mumbai";           // reuses same SCP object
+System.out.println(s10 == s11);  // true — same SCP object
+
+String s13 = new String("Mumbai"); // SCP: "Mumbai" already exists, reused
+                                    // Heap: brand new object created
+String s14 = new String("Mumbai"); // SCP: reused again
+                                    // Heap: ANOTHER brand new object created
+System.out.println(s13 == s14);  // false — two different heap objects</code></pre>
+
+<p><b>Concatenation — result goes to heap, reassignment required:</b></p>
+<pre><code class="language-java">String city = "Bangalore"; // SCP object
+city = city.concat(" India"); // new object "Bangalore India" created in HEAP
+                               // city is REASSIGNED to point to it
+System.out.println(city); // Bangalore India
+
+String city2 = "Delhi";   // SCP object
+city2.concat(" India");   // new object created in heap, but NOT reassigned
+System.out.println(city2); // still prints "Delhi" — original SCP object unchanged</code></pre>
+
+<p><b>equals() default behavior (Object class) vs overridden (String class):</b></p>
+<pre><code class="language-java">class Employee { }
+
+Employee e1 = new Employee();
+Employee e2 = new Employee();
+
+System.out.println(e1 == e2);        // false — different heap addresses
+System.out.println(e1.equals(e2));   // false — Employee doesn't override equals(),
+                                      // so it uses Object's default (same as ==)</code></pre>
+
+<pre><code class="language-java">String s1 = new String("Java");
+String s2 = new String("Java");
+
+System.out.println(s1 == s2);        // false — different heap objects (new keyword)
+System.out.println(s1.equals(s2));   // true — String overrides equals() to compare content</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>When using String literal (no "new"), does it also create an object in the heap?</td><td>No — a literal (no new keyword) only creates/reuses an object in the SCP; it does not additionally create anything in the heap.</td></tr>
+<tr><td>Why does new String("Bangalore") create two objects?</td><td>The literal argument "Bangalore" itself triggers an SCP object (or reuses an existing one), and separately, the new keyword forces creation of a distinct object in the heap — the variable refers to the heap object.</td></tr>
+<tr><td>Does the heap check for duplicate content like SCP does?</td><td>No — the heap never checks for duplicates; new always creates a fresh object regardless of existing identical content elsewhere.</td></tr>
+<tr><td>Is equals() the same as == for every class?</td><td>Only if that class doesn't override equals() — by default (Object class behavior) yes, they behave the same; String and some other classes override it to compare content instead.</td></tr>
+<tr><td>Why does Java allow creating multiple String objects with the same content via new, when it seems wasteful?</td><td>Because some use cases require object identity (multiple distinct objects) rather than just content — e.g. tracking movement/snapshots where each instance must remain distinct even with matching content.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>String literal → SCP only, with deduplication. new String(...) → SCP (for the literal argument) + a separate, always-new heap object.</li>
+<li>The heap never deduplicates on new — every new call creates a fresh object.</li>
+<li>== always compares addresses/references — never content — regardless of class.</li>
+<li>equals() defaults to == behavior (Object class) unless a class specifically overrides it (like String does).</li>
+<li>Don't blindly assume equals() always compares content — that's specific to classes (like String) that override it, not a universal Java rule.</li>
+<li>Concatenation results go to the heap; without reassignment, the original variable still points to the unmodified original object.</li>
+<li>Draw memory diagrams (SCP + heap boxes with addresses) when working through String object-counting problems — don't just guess from printed output.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write a program creating Strings via literal and via new keyword, then use == to compare various combinations and predict/verify the results.</li>
+<li>Write a custom class (e.g. Employee) with no overridden equals(), create two objects with identical field values, and confirm .equals() still returns false (default Object behavior).</li>
+<li>Compare that against String's .equals() behavior with identical content to see the contrast.</li>
+<li>Practice counting total objects created across a short sequence of String declarations mixing literals, new keyword, and concatenation.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Private constructors, Singleton intro, Strings — literal creation, SCP, immutability</li>
+<li><b>Upcoming Topics:</b> Method overriding (mentioned as the mechanism behind String's custom equals()); String intern() method (briefly referenced, not yet explained); class test scheduled</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. No new technical content was added beyond what the instructor taught. The extended live Q&A with a student working through their confusion about literal vs new object creation was summarized into the relevant concept cards rather than transcribed as dialogue.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

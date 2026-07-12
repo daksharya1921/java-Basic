@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 22</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 22 — String Concatenation Optimization & intern()</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Concatenating two String literals with + — compile-time optimization</li>
+<li>Concatenating String objects/variables with + — runtime behavior via StringBuilder</li>
+<li>Object counting practice across various String creation scenarios</li>
+<li>Why Java provides both content-based (SCP) and identity-based (heap) object creation — practical use cases</li>
+<li>The intern() method — purpose and behavior</li>
+<li>String concatenation with non-string types (numbers, null) and left-to-right evaluation</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Compile-Time Optimization: Literal + Literal</b>
+<p>When you concatenate two String <b>literals</b> using <code>+</code>, the Java <b>compiler</b> optimizes this at <b>compile time</b> — it merges them into a single combined literal <b>before</b> the program even runs. As a result, only <b>one object</b> is created in the SCP for the final combined string — exactly as if you'd written the combined string directly.</p>
+</div>
+
+<div class="card">
+<b>Runtime Behavior: Variable/Object + Anything</b>
+<p>When concatenating using <code>+</code> where <b>at least one operand is a variable/reference</b> (not a plain literal known at compile time), Java cannot optimize this ahead of time — it happens at <b>runtime</b>. Internally, Java uses a <b>StringBuilder</b> to perform the concatenation, and the resulting object is created in the <b>Heap</b> (not the SCP).</p>
+</div>
+
+<div class="card">
+<b>Why Both SCP (Content) and Heap (Identity) Creation Exist</b>
+<p>Recap/expansion: most real applications favor <b>content-based reuse</b> (SCP) since the same values (city names, product names, etc.) repeat across millions of users — creating a new object every time would waste huge amounts of memory. However, some use cases specifically need <b>object identity</b> — e.g. location-tracking or audit-trail systems where you need to know <b>how many distinct actions/objects</b> were created for a given value, regardless of whether the content repeats. In these cases, <code>new</code> keyword object creation (always a fresh heap object) is the right tool.</p>
+</div>
+
+<div class="card">
+<b>The intern() Method</b>
+<p><code>intern()</code> is used to <b>move/link a heap-created String object to the SCP</b>. When called on a String:</p>
+<ul>
+<li>If a String with the <b>same content already exists</b> in the SCP, the reference now points to that <b>existing SCP object</b> (and the original heap object becomes unreferenced/orphaned, eligible for garbage collection).</li>
+<li>If <b>no matching object exists</b> in the SCP yet, the content is <b>copied into</b> the SCP as a new object, and the reference now points to that new SCP object.</li>
+</ul>
+<p>Purpose: memory optimization — letting you take a heap-created (e.g. via <code>new</code> or concatenation) String and "promote" it into the reusable SCP pool if desired.</p>
+</div>
+
+<div class="card">
+<b>Orphaned Objects and Garbage Collection</b>
+<p>When a reference is redirected (e.g. via <code>intern()</code>) away from a heap object, and nothing else refers to that old heap object, it becomes <b>orphaned</b> — eligible to be reclaimed by the <b>garbage collector</b>.</p>
+</div>
+
+<div class="card">
+<b>Concatenating Strings with Numbers and null</b>
+<p>The <code>+</code> operator evaluates <b>left to right</b>. Once a String is involved anywhere in the chain, everything after it in that evaluation gets treated as a String and appended — including numbers (converted to their string form) and even <code>null</code> (printed literally as the text "null", not a NullPointerException) — <b>as long as</b> a String starts the concatenation early enough in the expression.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Compile-time optimization — literal + literal:</b></p>
+<pre><code class="language-java">String s = "Codewala" + " Academy";
+// Compiler merges this into "Codewala Academy" BEFORE runtime
+// Only ONE object created in SCP — same as writing:
+// String s = "Codewala Academy";</code></pre>
+
+<p><b>Runtime concatenation — object/variable involved, uses StringBuilder, goes to heap:</b></p>
+<pre><code class="language-java">String s1 = new String("Hello");
+String s2 = s1 + " World";
+// s1 is a reference (not a compile-time-known literal)
+// Concatenation happens at RUNTIME using StringBuilder internally
+// Result object "Hello World" is created in the HEAP, not SCP
+
+String s5 = "Hello World"; // literal — SCP object
+System.out.println(s2 == s5); // false — s2 is in heap, s5 is in SCP, different objects
+System.out.println(s2.equals(s5)); // true — same content</code></pre>
+
+<p><b>Using intern() to link a heap object to the SCP:</b></p>
+<pre><code class="language-java">String s1 = new String("Hello"); // heap object (+ "Hello" also exists/created in SCP)
+String s2 = "Hello";             // SCP object
+
+System.out.println(s1 == s2); // false — s1 is heap, s2 is SCP
+
+String s3 = s1.intern(); // "Hello" already exists in SCP -> s3 now points to that SCP object
+System.out.println(s3 == s2); // true — both now point to the same SCP object</code></pre>
+
+<p><b>intern() when the content doesn't exist yet in SCP — gets copied in:</b></p>
+<pre><code class="language-java">String s10 = "Codewala";
+String combined = s10.concat(" Academy"); // heap object "Codewala Academy" (via runtime concat)
+
+String internedResult = combined.intern();
+// "Codewala Academy" doesn't exist in SCP yet -> it gets COPIED into SCP
+// internedResult now refers to this new SCP object</code></pre>
+
+<p><b>String concatenation with numbers and null — left to right evaluation:</b></p>
+<pre><code class="language-java">System.out.println("Value: " + 50 + "Sachin"); // "Value: 50Sachin"
+// starts as String -> everything appended as string from left to right
+
+System.out.println(50 + 60 + "Sachin"); // "110Sachin"
+// 50 + 60 evaluated as numbers FIRST (both are int, no string yet) = 110
+// then "Sachin" appended as string -> "110Sachin"
+
+String name = null;
+System.out.println("Sachin" + name); // "Sachinnull"
+// null is printed literally as text "null" when concatenated with a String
+</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>If objects in the SCP have no reference anymore, why don't they get garbage collected like heap objects?</td><td>SCP objects persist for reusability — since the same content is likely to be needed again by other parts of a large-scale application, keeping them avoids recreating identical objects repeatedly; SCP objects are generally retained until class unloading, not eagerly garbage collected like typical heap objects.</td></tr>
+<tr><td>Why not always use identity (new keyword) objects instead of SCP, for safety/tracking purposes?</td><td>Because most real-world data (city names, product names, etc.) genuinely repeats across huge numbers of users — using new for everything would cause massive unnecessary memory usage; identity-based creation is reserved for specific use cases like tracking distinct actions/movements.</td></tr>
+<tr><td>What is the actual purpose of intern() if literals already go to SCP automatically?</td><td>intern() is specifically for Strings that were NOT created as literals (e.g. via new or concatenation, which land in the heap) — it lets you deliberately move/link them into the SCP for reuse, rather than leaving them as separate heap objects.</td></tr>
+<tr><td>Would storing sensitive data (like credit card numbers) in the SCP be a security concern?</td><td>Not really a distinguishing factor — sensitive/unique data like credit card numbers wouldn't benefit from SCP's reuse mechanism anyway (since they're unique per customer, not repeated), so they'd typically be handled via heap objects (and masked/secured through other means) rather than SCP.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Literal + literal concatenation is optimized at compile time into a single SCP object.</li>
+<li>Concatenation involving any variable/object reference happens at runtime via StringBuilder, and the result lands in the heap.</li>
+<li>intern() is the tool to move a heap-created String into the SCP (reusing an existing match, or copying it in as new).</li>
+<li>String concatenation evaluates left to right — numeric addition only happens before a String appears in the expression; after that, everything becomes string concatenation.</li>
+<li>Concatenating null with a String prints the literal text "null" — it does not throw a NullPointerException.</li>
+<li>Don't assume identity-based (new keyword) object creation is "safer" by default — it's a deliberate design choice for specific tracking/identity use cases, not a general best practice.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write examples combining literal + literal concatenation and variable + literal concatenation; predict and verify SCP vs heap placement and object counts.</li>
+<li>Practice using intern() on a heap-created String and confirm with == whether it now matches an SCP-created String with the same content.</li>
+<li>Write a few String + number + string concatenation expressions and manually trace left-to-right evaluation before checking actual output.</li>
+<li>Test concatenating a null String reference with a literal and confirm the "null" text output.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> String via new keyword, == vs equals(), content vs identity use cases</li>
+<li><b>Upcoming Topics:</b> StringBuilder / StringBuffer (mentioned as the mechanism behind runtime concatenation); class test scheduled for this session</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. No new technical content was added beyond what the instructor taught. Extended motivational remarks at the start of class and extensive live Q&A dialogue were excluded/summarized as non-technical or already-covered content.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

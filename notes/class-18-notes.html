@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 18</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 18 — Object Class as Universal Parent & Constructor Chaining — ⚠️ Fragmented Transcript</p>
+</div>
+
+<div class="note" style="margin:24px 40px;">
+<b>Heads up:</b> The two messages shared for this class are short fragments — one from the end of the session (wrapping up constructor chaining, mentioning it continues "tomorrow"), and one from the very start of the next session (recapping Object class basics). The middle explanation, full syntax, and complete examples for constructor chaining are still missing. Notes below reflect only what's actually present.
+</div>
+
+<div class="section">
+<h2>🎯 Topics Touched On</h2>
+<ul>
+<li>Every Java class implicitly extends the built-in <code>Object</code> class</li>
+<li>Why a child class can call methods it never wrote itself (e.g. hashCode)</li>
+<li>Parent class must be initialized before the child class object</li>
+<li>Constructor chaining — introduced, continues into next session (not detailed here)</li>
+<li>Compiler default constructor rule — recap (from previous class): adding a parameterized constructor removes the auto-added default one</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts (From Available Fragments)</h2>
+
+<div class="card">
+<b>Every Class Implicitly Extends Object</b>
+<p>In Java, every class you create is automatically a <b>child of the built-in <code>Object</code> class</b>, even if you don't write <code>extends Object</code> explicitly. Because of this, every Java class automatically gets certain methods that "every Java class requires" — the instructor mentioned <code>equals</code> and <code>hashCode</code> as examples of such inherited methods.</p>
+</div>
+
+<div class="card">
+<b>Why a Class Can Call a Method It Never Defined</b>
+<p>If you create an object of your own class (e.g. <code>P1</code>) and can call a method like <code>hashCode()</code> that isn't written anywhere in your class, it's because that method comes from the <b>parent Object class</b> — inherited automatically.</p>
+</div>
+
+<div class="card">
+<b>Parent Must Be Initialized Before Child</b>
+<p>Before a child class object can be created/used, its <b>parent class must be initialized first</b>. This is why access to inherited members (like Object class methods) works — the parent's initialization happens as part of creating the child object.</p>
+</div>
+
+<div class="card">
+<b>Constructor Chaining — Introduced (Details Pending)</b>
+<p>The class was discussing "constructor chaining" as a topic, and it was explicitly noted this would <b>continue into the next session</b> — meaning the full explanation, syntax (likely involving <code>super()</code> or <code>this()</code> calls between constructors), and examples were not part of what's been shared.</p>
+</div>
+
+<div class="card">
+<b>Recap: Default Constructor Rule</b>
+<p>Confirmed again: if you declare a parameterized constructor in a class, the compiler will <b>not</b> automatically add a default no-argument constructor.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>❓ Terms Mentioned But Not Yet Explained</h2>
+<table>
+<tr><th>Term</th><th>Status</th></tr>
+<tr><td>"export" (as mentioned mid-sentence)</td><td>Instructor explicitly said this would be explained later — not covered in this excerpt.</td></tr>
+<tr><td>Constructor chaining</td><td>Introduced by name only; full mechanics not covered in this excerpt.</td></tr>
+<tr><td>hashCode() / equals()</td><td>Named as inherited Object class methods; not explained in detail here.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Note on Coverage</h2>
+<ul>
+<li>This class appears to be part of a multi-day sequence on inheritance and constructors — the fuller explanation of parent-child class relationships, the Object class, and constructor chaining likely exists in the portion of the transcript not yet shared.</li>
+<li>No code examples were shown in the available excerpt, so none are included here to avoid fabricating content not actually taught.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Next Steps</h2>
+<ul>
+<li>If you have the fuller recording covering constructor chaining and the Object class in detail, send it and I'll complete Class 18 properly.</li>
+<li>Otherwise, send the next class's transcript (likely the continuation of constructor chaining) and I'll build that as Class 19, folding in context from this fragment where relevant.</li>
+</ul>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 03</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 03 — Compilation, JVM Execution, Access Modifiers, Static & Void</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Class naming and file naming while compiling</li>
+<li>Multiple classes in one file → multiple .class files</li>
+<li>Compilation vs Build (Maven, Gradle)</li>
+<li>Reading compiler errors carefully</li>
+<li>What the compiler actually checks (syntax only)</li>
+<li>Valid method structure (access modifier, return type, name, body)</li>
+<li>Exact main method signature required by JVM</li>
+<li>Why main method is <b>public</b></li>
+<li>Why main method is <b>static</b></li>
+<li>Why main method is <b>void</b></li>
+<li>Method naming convention (camelCase)</li>
+<li>Purpose of <code>String[] args</code> (command line arguments)</li>
+<li>Multiple main methods in one class (method overloading)</li>
+<li>Basic overview of memory areas: MetaSpace, Heap, Stack</li>
+<li>Build tools used in industry: Maven, Gradle</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>File Name vs Class Name</b>
+<p>While compiling, you provide the <b>file name</b> (e.g. <code>account.java</code>). While running, you provide the <b>class name</b> that contains the main method (e.g. <code>AccountInfo</code>).</p>
+</div>
+
+<div class="card">
+<b>Multiple Classes → Multiple .class Files</b>
+<p>If a single Java file contains multiple classes, compiling it generates one <code>.class</code> file for each class.</p>
+</div>
+
+<div class="card">
+<b>Compile vs Build</b>
+<p>In industry, developers don't compile files individually using <code>javac</code>. Since a project can have 10,000+ files, a <b>build tool</b> like <b>Maven</b> or <b>Gradle</b> is used to compile the code, manage dependencies, and create JAR files. This process is called a <b>"build"</b>, not just "compile".</p>
+</div>
+
+<div class="card">
+<b>Reading Compiler Errors</b>
+<p>Whenever a compilation error occurs, read the error message carefully — check the file name, line number, and the exact error text. There is no shortcut to this; repeated practice reading errors builds expertise.</p>
+</div>
+
+<div class="card">
+<b>What the Compiler Actually Checks</b>
+<p>The compiler only checks whether the code follows correct Java <b>syntax</b> — it does not care what the class is named, what the method does, or whether the main method is written correctly. As long as a method declaration is syntactically valid (access modifier + return type + name + body), it will compile — even if it isn't the main method JVM is looking for.</p>
+</div>
+
+<div class="card">
+<b>Exact Main Method Signature (Required for Execution)</b>
+<pre><code class="language-java">public static void main(String[] args) {
+
+}</code></pre>
+<p>The code can still <b>compile</b> without this exact signature, but it will <b>not run</b> — JVM specifically looks for a method matching <code>public static void main(String[] args)</code>.</p>
+</div>
+
+<div class="card">
+<b>Why Main Method is Public</b>
+<p>The main method must be callable from <b>outside</b> the class. JVM (which is outside the class) needs to call this method to start execution. If the method were not public, JVM would not be able to call it.</p>
+</div>
+
+<div class="card">
+<b>Why Main Method is Static</b>
+<p>When the program starts, no object has been created yet. Since <b>static</b> members belong to the class (not an object), JVM can call the main method directly using the class name — <code>ClassName.main()</code> — without needing to create an object first.</p>
+</div>
+
+<div class="card">
+<b>Why Main Method is Void</b>
+<p>The caller of main is JVM. Since JVM does not use or expect any returned value, there is no purpose in returning anything — hence the return type is <b>void</b> (nothing is returned).</p>
+</div>
+
+<div class="card">
+<b>Method Naming Convention — camelCase</b>
+<p>The first word starts with a lowercase letter; every subsequent word starts with an uppercase letter (e.g. <code>calculateInterest</code>, <code>doSomething</code>). This is different from class naming, where every word starts with an uppercase letter.</p>
+</div>
+
+<div class="card">
+<b>Purpose of String[] args</b>
+<p>Used to supply input values to a program at the time of execution via the command line, instead of hardcoding them. These inputs are stored inside a String array. Example: <code>args[0]</code> holds the first value passed on the command line.</p>
+</div>
+
+<div class="card">
+<b>Multiple Main Methods in One Class</b>
+<p>A class can have multiple overloaded main methods (different parameter lists). The code will compile and run — but JVM will only execute the one matching the exact signature <code>public static void main(String[] args)</code>.</p>
+</div>
+
+<div class="card">
+<b>Memory Areas (High-Level Only)</b>
+<ul>
+<li><b>MetaSpace</b> — holds bytecode/class metadata; static members also reside here</li>
+<li><b>Heap</b> — holds objects</li>
+<li><b>Stack</b> — holds method call frames (method execution stack) and local variables</li>
+</ul>
+<p>Instructor noted this is a very high-level introduction; internal memory management will be covered in depth later.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<pre><code class="language-java">class AccountInfo {
+
+    public static void main(String[] args) {
+        System.out.println("Processing Payment");
+    }
+
+}</code></pre>
+
+<p><b>Compilation:</b></p>
+<pre><code class="language-bash">javac account.java</code></pre>
+
+<p><b>Execution:</b></p>
+<pre><code class="language-bash">java AccountInfo</code></pre>
+
+<p><b>Reading command line arguments:</b></p>
+<pre><code class="language-java">class AccountInfo {
+
+    public static void main(String[] args) {
+        String name = args[0];
+        System.out.println(name);
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java AccountInfo lowcase</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Why is main method declared static?</td><td>So JVM can call it directly using the class name, without needing to create an object.</td></tr>
+<tr><td>Why is main method public?</td><td>So it can be called from outside the class — by JVM.</td></tr>
+<tr><td>Why is main method void?</td><td>JVM does not expect any return value from main.</td></tr>
+<tr><td>What is the naming convention for methods in Java?</td><td>Camel case — first word lowercase, subsequent words capitalized.</td></tr>
+<tr><td>What is the purpose of String[] args?</td><td>To take input from the command line and store it as a variable that can be used in the program.</td></tr>
+<tr><td>Can a class have multiple main methods?</td><td>Yes — this is method overloading. It will compile and run, but JVM executes only the method matching the exact signature <code>public static void main(String[] args)</code>.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Compilation uses the file name; execution uses the class name.</li>
+<li>Compiler only checks syntax — it does not validate whether your main method signature is correct.</li>
+<li>Code can compile successfully but still fail to run if the main method signature is wrong.</li>
+<li>If a file has multiple classes, each class generates its own <code>.class</code> file.</li>
+<li>Always read compilation error messages fully — check file name, line number, and message.</li>
+<li>In industry, "build" (via Maven/Gradle) is the term used instead of "compile" for large projects.</li>
+<li>Access modifier, static, and return type keywords (public, static, void) can be reordered relative to each other, but the return type must always appear immediately before the method name.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Practice compiling and running programs repeatedly — 20 to 30 times — to get comfortable with compilation and execution.</li>
+<li>Try removing/changing the main method (no main method, wrong access modifier, wrong static/void) and observe compilation vs execution results.</li>
+<li>Try creating multiple overloaded main methods in one class and observe behavior.</li>
+<li>Get comfortable with class query (understanding class structure) before moving forward.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Java naming conventions, error reading and fixing</li>
+<li><b>Upcoming Topics (mentioned by instructor):</b> Maven build tool, thread internals, memory management in depth, command line arguments in depth</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only the section headings, grouping of related points under labeled cards, and formatting/styling. No technical content was added beyond what the instructor taught.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

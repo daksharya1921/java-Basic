@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 15</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+.keybox{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+.key{background:#1e1e2f;color:#d4d4f7;padding:10px 16px;border-radius:8px;font-family:monospace;font-size:14px;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 15 — Debugging in Eclipse, Switch-Case & Multiple Classes</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Eclipse IDE — locating project files on disk, project properties</li>
+<li>Debugging — breakpoints, and why debugging matters</li>
+<li>Debug navigation shortcuts: F5, F6, F7, F8</li>
+<li>Managing/terminating running debug processes (avoiding memory buildup)</li>
+<li>switch-case statement — syntax, purpose, and how it replaces long if/else-if chains</li>
+<li>break statement in switch-case — why it's required</li>
+<li>default case in switch</li>
+<li>Why printing inside a method isn't the same as returning a value</li>
+<li>Writing and calling methods across multiple classes</li>
+<li>Code refactoring — removing duplicate logic</li>
+<li>Practice: IRCTC-style ticket booking with user type validation</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Where Eclipse Stores Your Code</b>
+<p>Eclipse is just an <b>IDE (tool)</b> to help develop code — the actual source files are stored on disk under the project's workspace folder (Project → Properties → Resources shows the exact path), inside the package folder structure (e.g. <code>src/com/codewala/</code>).</p>
+</div>
+
+<div class="card">
+<b>Why Debugging Matters</b>
+<p>In real company environments, nobody walks you through every class — you're often just told "check this class." Debugging lets you <b>pause execution</b> and inspect the internal state (variable values) of a running program at a specific point, which is essential for understanding unfamiliar code.</p>
+</div>
+
+<div class="card">
+<b>Breakpoints</b>
+<p>A breakpoint marks a line where execution should <b>pause</b> when running in debug mode. Without setting a breakpoint first, debug mode will simply run through the program like a normal run — you must place the breakpoint on the line where you want control to stop.</p>
+</div>
+
+<div class="card">
+<b>Debug Navigation Shortcuts</b>
+<div class="keybox">
+<span class="key">F6 — Step Over (next line)</span>
+<span class="key">F5 — Step Into (go inside a method)</span>
+<span class="key">F7 — Step Return (go back to caller)</span>
+<span class="key">F8 — Resume (jump to next breakpoint)</span>
+</div>
+<ul>
+<li><b>F6</b> — moves to the next line in the current method (step over)</li>
+<li><b>F5</b> — steps <b>inside</b> the method being called on the current line</li>
+<li><b>F7</b> — returns control back to where the current method was called from</li>
+<li><b>F8</b> — resumes execution until the <b>next breakpoint</b> is hit, skipping line-by-line stepping</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Terminate Debug Sessions Properly</b>
+<p>Each debug run starts a new JVM process that occupies memory. If previous debug sessions aren't terminated, memory builds up and can eventually prevent new sessions from launching, or slow down the system. Always <b>terminate</b> a debug session when done before starting a new one.</p>
+</div>
+
+<div class="card">
+<b>switch-case — What It Replaces</b>
+<p><code>switch</code> is a cleaner alternative to writing a long chain of <code>if / else if / else if / ...</code> statements when checking multiple possible values of a <b>single variable/expression</b>.</p>
+</div>
+
+<div class="card">
+<b>switch-case Syntax</b>
+<pre><code class="language-java">switch (variable) {
+    case value1:
+        // logic
+        break;
+    case value2:
+        // logic
+        break;
+    default:
+        // logic if nothing matched
+}</code></pre>
+</div>
+
+<div class="card">
+<b>Why break is Required in Each Case</b>
+<p>Without <code>break</code>, execution <b>falls through</b> to the next case(s) even after a match is found, continuing until it hits a break or reaches the end of the switch block. Always add <code>break</code> at the end of each case (as best practice) to avoid unintended fall-through bugs — this is a very common exam/interview question.</p>
+</div>
+
+<div class="card">
+<b>default Case</b>
+<p>The <code>default</code> case executes when none of the specified case values match. It doesn't have to be written last (though that's the conventional placement) and doesn't strictly require its own break if it's the final block.</p>
+</div>
+
+<div class="card">
+<b>Printing vs Returning — Why It Matters</b>
+<p>If a method just <b>prints</b> a result (System.out.println) instead of <b>returning</b> it, the calling class/method has <b>no way to access that result</b> — printed output only appears in the console of the class that printed it, and is invisible to other classes. For another class to use a method's result, that method must <b>return</b> the value (not just print it). Example: a payment app's balance-check method must return the balance, not just print it — otherwise the app UI would never show the balance.</p>
+</div>
+
+<div class="card">
+<b>Calling Methods Across Multiple Classes</b>
+<p>Not every class needs a <code>main</code> method — typically only one class has <code>main</code>, and other classes contain reusable logic exposed through public methods, called from the main class (or from each other).</p>
+</div>
+
+<div class="card">
+<b>Code Refactoring</b>
+<p>Refactoring means <b>reworking existing, working code</b> to remove duplication or improve structure — without changing its functional behavior. Example: if two nearly identical methods exist for handling similar cases (e.g. separate methods for retail vs agent ticket booking), they can often be merged into a single method with proper condition-checking logic.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>switch-case — identify day from a number:</b></p>
+<pre><code class="language-java">package com.codewala;
+
+class SwitchDemo {
+
+    public static void main(String[] args) {
+        int number = Integer.parseInt(args[0]);
+        String result = SwitchDemo.identifyDay(number);
+        System.out.println(result);
+    }
+
+    public static String identifyDay(int number) {
+        String day = null;
+
+        switch (number) {
+            case 1:
+                day = "Monday";
+                break;
+            case 2:
+                day = "Tuesday";
+                break;
+            case 3:
+                day = "Wednesday";
+                break;
+            default:
+                day = "Unknown";
+        }
+
+        return day;
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java com.codewala.SwitchDemo 3</code></pre>
+
+<p><b>Why printing instead of returning breaks caller usage (bad example):</b></p>
+<pre><code class="language-java">// BAD: caller cannot access this result
+public static void identifyDay(int number) {
+    String day = "Wednesday";
+    System.out.println(day); // only visible in THIS class's console output
+}
+
+// GOOD: caller receives the result
+public static String identifyDay(int number) {
+    String day = "Wednesday";
+    return day; // caller can now use this value
+}</code></pre>
+
+<p><b>switch-case — discount calculator by customer type:</b></p>
+<pre><code class="language-java">private static void calculateDiscount(String type) {
+    switch (type) {
+        case "Silver":
+            // silver customer discount logic
+            break;
+        case "Gold":
+            // gold customer discount logic
+            break;
+        default:
+            // non-standard/unknown customer type
+    }
+}</code></pre>
+
+<p><b>Practice exercise — IRCTC-style ticket booking across two classes:</b></p>
+<pre><code class="language-java">// File: IRCTC.java
+package com.codewala;
+
+class IRCTC {
+
+    public static void main(String[] args) {
+        Booking.bookTicket("Retail", 3);
+    }
+
+}</code></pre>
+<pre><code class="language-java">// File: Booking.java
+package com.codewala;
+
+class Booking {
+
+    public static void bookTicket(String userType, int numberOfTickets) {
+        Booking.validateBooking(userType, numberOfTickets);
+    }
+
+    private static void validateBooking(String userType, int numberOfTickets) {
+        if (userType.equals("Retail")) {
+            if (numberOfTickets > 6) {
+                System.out.println("Not allowed, retail user can book max 6 tickets");
+            } else {
+                System.out.println("Booking confirmed for retail user");
+            }
+        } else if (userType.equals("Agent")) {
+            System.out.println("Booking confirmed for agent, any number of tickets allowed");
+        } else {
+            System.out.println("Booking is not supported for unknown user type");
+        }
+    }
+
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Why does debug mode just run through without pausing?</td><td>A breakpoint must be set first — without one, debug mode behaves like a normal run.</td></tr>
+<tr><td>Why isn't a printed value inside a method visible to the class that called it?</td><td>Console output is only visible to the class/process that printed it; other classes need the value to be returned, not printed.</td></tr>
+<tr><td>Is break mandatory in every switch case?</td><td>Not syntactically mandatory, but functionally essential — without it, execution falls through into subsequent cases, causing incorrect behavior. Treated as required best practice.</td></tr>
+<tr><td>Does every class need a main method?</td><td>No — only one class typically has main; other classes provide reusable methods called from main or from each other.</td></tr>
+<tr><td>Why refactor code that already produces correct output?</td><td>To remove duplicate logic and improve maintainability, even if the output is already correct — this is standard practice in real development.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Always terminate debug sessions after use to avoid memory buildup from multiple running JVM processes.</li>
+<li>Always include break at the end of each switch case unless intentional fall-through is required.</li>
+<li>A method meant to be used by other classes must return its result — printing alone is insufficient.</li>
+<li>Avoid duplicating similar logic across multiple methods; refactor into a single method with proper conditions where possible.</li>
+<li>Close class and method braces immediately as you write them to avoid confusing "missing token" compiler errors later.</li>
+<li>Focus on solving the business problem correctly; the specific Java version/newest features are secondary to solid fundamentals.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Practice debugging any existing program using breakpoints and F5/F6/F7/F8 to trace execution and inspect variable values.</li>
+<li>Rewrite an existing if-else-if chain using switch-case instead.</li>
+<li>Build the IRCTC-style ticket booking exercise using two classes (main class + booking logic class), following the retail (max 6 tickets) / agent (unlimited) / unknown user type rules.</li>
+<li>Practice writing multiple classes daily, with methods called across classes (not just within one class).</li>
+<li>Review your own code for duplicate logic and refactor it into a single reusable method.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Loops — for, while, do-while</li>
+<li><b>Upcoming Topics:</b> Continued multi-class design practice; class test scheduled (Friday routine)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, the debug-shortcut key visual, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive individual student code-review chatter during the practice session was summarized into general common-mistake points.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

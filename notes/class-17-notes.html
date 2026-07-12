@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 17</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 17 — Objects & Constructors</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>What is an object — the real-world entity vs class as blueprint</li>
+<li>Class members recap: fields (data/state), methods (behavior), and now constructors</li>
+<li>What a constructor is and its purpose</li>
+<li>Creating an object using the <code>new</code> keyword</li>
+<li>No-argument constructor vs parameterized constructor</li>
+<li>Overloading constructors (multiple constructors in one class)</li>
+<li>Instance variables — values are specific to each object</li>
+<li>Reference variable (stack) vs actual object (heap)</li>
+<li>Default constructor — added automatically by the compiler if none is provided</li>
+<li>Debugging as a tool for understanding object creation and state</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Class = Blueprint, Object = Real Entity</b>
+<p>A class acts as a <b>blueprint</b> (like an architectural drawing before a house is built) — it defines the structure. An <b>object</b> is the actual <b>real entity</b> created from that blueprint (the real house). Example: an <code>SBIUser</code> class is the blueprint; each actual customer who logs in becomes a real <code>SBIUser</code> object holding their specific details.</p>
+</div>
+
+<div class="card">
+<b>Why We Create Objects</b>
+<p>To represent a real-world entity (a person, a product, a payment, an employee) inside a program, you create an <b>object</b> of the relevant class. One class can be used to create <b>many objects</b> — e.g. millions of SBI customers all use the same <code>SBIUser</code> class, but each gets their own unique object holding their own data.</p>
+</div>
+
+<div class="card">
+<b>Class Members Recap: Fields, Methods, Constructors</b>
+<ul>
+<li><b>Fields (data/attributes/state)</b> — e.g. name, userId, password, balance</li>
+<li><b>Methods (behavior)</b> — what the object can do, e.g. deposit, withdraw</li>
+<li><b>Constructor (new)</b> — special member responsible for <b>creating</b> the object</li>
+</ul>
+</div>
+
+<div class="card">
+<b>What is a Constructor?</b>
+<p>"Construct" means to create/build. A constructor is a special block of code, with the <b>same name as the class</b>, that runs when an object is created — it's responsible for <b>constructing (creating) the object</b>, and can also be used to <b>initialize</b> its field values.</p>
+</div>
+
+<div class="card">
+<b>Constructor vs Method — Key Difference</b>
+<p>Unlike a method, a constructor has <b>no return type</b> (not even void) and must be named <b>exactly the same</b> as the class.</p>
+</div>
+
+<div class="card">
+<b>Creating an Object — the new Keyword</b>
+<p>The <code>new</code> keyword instructs Java to create a new object by calling a constructor. Without <code>new</code>, the compiler/JVM would have no clear instruction to build an object — <code>new</code> makes the intent explicit.</p>
+<pre><code class="language-java">SBIUser user = new SBIUser();
+</code></pre>
+<p>Here, <code>SBIUser</code> (left) is the <b>type</b>, <code>user</code> is the <b>reference variable name</b>, and <code>new SBIUser()</code> creates the actual object and calls its constructor.</p>
+</div>
+
+<div class="card">
+<b>No-Argument Constructor</b>
+<p>A constructor that takes no parameters. When called, it creates the object but — unless you write initialization logic inside it — fields are left at their <b>default values</b> (0 for numeric primitives, null for object references like String).</p>
+</div>
+
+<div class="card">
+<b>Parameterized Constructor</b>
+<p>A constructor that accepts arguments, used to <b>initialize field values</b> at the time of object creation. A class can have <b>multiple constructors</b> (constructor overloading) — Java picks the correct one to call based on the number and type of arguments supplied.</p>
+</div>
+
+<div class="card">
+<b>Local Parameters vs Instance Fields — Naming Convention</b>
+<p>To avoid confusion between a constructor's local parameter names and the class's instance fields, an underscore prefix convention was used for parameters (e.g. <code>_name</code>) so it's clear which is temporary/local and which is the object's actual state. Alternatively, <code>this.fieldName</code> can be used to explicitly refer to the current object's instance variable.</p>
+</div>
+
+<div class="card">
+<b>Instance Variables — Specific to Each Object</b>
+<p>Even though instance variables are declared once in the class, <b>each object gets its own independent copy</b> of their values. Creating two objects of the same class (e.g. one for "Abhinav", one for "Asis") results in two separate sets of field values in memory — changing one object's data does not affect the other's.</p>
+</div>
+
+<div class="card">
+<b>Reference Variable (Stack) vs Actual Object (Heap)</b>
+<p>The reference variable (e.g. <code>user</code>) is a <b>local variable</b> stored in the <b>Stack</b>. The actual object it points to is stored in the <b>Heap</b>. The reference variable simply holds the <b>address</b> of the real object in the heap — similar to how every real person has a unique physical address.</p>
+</div>
+
+<div class="card">
+<b>Default Constructor (Compiler-Provided)</b>
+<p>If a class has <b>no constructor written at all</b>, the Java compiler automatically adds a hidden <b>no-argument default constructor</b>, which is why <code>new ClassName()</code> still works even without an explicit constructor. However, if you write <b>even one</b> constructor yourself (e.g. with parameters), the compiler <b>no longer</b> provides the default one — so calling a no-argument constructor after that will fail unless you explicitly define one too.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Class with fields, a no-argument constructor, and a parameterized constructor:</b></p>
+<pre><code class="language-java">package com.sbi;
+
+class SBIUser {
+
+    private String name;
+    private String userId;
+    private String password;
+    private int balance;
+
+    // No-argument constructor
+    public SBIUser() {
+        System.out.println("Constructor called, new object created");
+    }
+
+    // Parameterized constructor
+    public SBIUser(String _name, String _userId, String _password, int _balance) {
+        name = _name;
+        userId = _userId;
+        password = _password;
+        balance = _balance;
+    }
+
+}</code></pre>
+
+<p><b>Creating objects — no-argument vs parameterized:</b></p>
+<pre><code class="language-java">class Main {
+
+    public static void main(String[] args) {
+        SBIUser user1 = new SBIUser(); // calls no-argument constructor
+        // fields will be at default values: null, null, null, 0
+
+        SBIUser user2 = new SBIUser("Abhinav", "Abhi123", "test123", 10000);
+        // fields initialized: name="Abhinav", userId="Abhi123", password="test123", balance=10000
+
+        SBIUser user3 = new SBIUser("Asis", "Asis123", "pass456", 20000);
+        // separate object — its own independent copy of field values
+    }
+
+}</code></pre>
+
+<p><b>Using "this" for clarity (alternative to underscore convention):</b></p>
+<pre><code class="language-java">public SBIUser(String name, String userId, String password, int balance) {
+    this.name = name;       // this.name refers to the current object's field
+    this.userId = userId;
+    this.password = password;
+    this.balance = balance;
+}</code></pre>
+
+<p><b>What happens without a written constructor (compiler adds default one):</b></p>
+<pre><code class="language-java">class Payment {
+    // no constructor written here
+}
+
+// Still works — compiler silently adds a no-argument default constructor:
+Payment payment = new Payment();
+</code></pre>
+
+<p><b>Why this fails once you add a parameterized constructor:</b></p>
+<pre><code class="language-java">class Payment {
+    public Payment(int amount) {
+        // ...
+    }
+}
+
+// This will NOT compile — compiler no longer provides a default no-arg constructor:
+Payment payment = new Payment(); // ERROR
+</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>What is the role of the "new" keyword?</td><td>It signals to the compiler/JVM that a new object should be created by calling the specified constructor.</td></tr>
+<tr><td>Can an object be created in Java without any constructor?</td><td>Technically no — if none is written, the compiler automatically inserts a default no-argument constructor behind the scenes, which is why it still works.</td></tr>
+<tr><td>If two objects have the same field names (e.g. both have "balance"), how are their values kept separate?</td><td>Each object gets its own independent copy of instance variable values in memory — the field name is shared in the class definition, but the value is per-object.</td></tr>
+<tr><td>Where is the reference variable stored vs the actual object?</td><td>The reference variable is a local variable stored in the Stack; the actual object is stored in the Heap.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Constructor name must exactly match the class name, and it has no return type.</li>
+<li>Instance variable values are unique per object — don't confuse shared field declarations with shared values.</li>
+<li>If you write any parameterized constructor, the compiler no longer auto-generates a default no-argument constructor — write one explicitly if both are needed.</li>
+<li>Reference variables live on the Stack; actual objects live on the Heap.</li>
+<li>Real understanding of instance variables and object creation matters more than chasing newer Java version features — solid fundamentals matter most.</li>
+<li>Use debugging (breakpoints, stepping through code) to actually observe how objects and their field values are created and initialized — this builds much deeper understanding than reading code alone.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write a class with private fields, a no-argument constructor, and a parameterized constructor.</li>
+<li>Create two or more objects of the same class with different field values, and debug through the code to observe how each object holds its own independent state.</li>
+<li>Try creating a class with only a parameterized constructor and attempt to call a no-argument version — observe and understand the compiler error.</li>
+<li>Practice identifying real-world entities (payment, invoice, product, employee — not generic "car/vehicle" examples) and design classes/objects to represent them.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Debugging in Eclipse, switch-case, multiple classes</li>
+<li><b>Upcoming Topics:</b> Object creation to be covered in more depth over the next few days; methods on objects (behavior) using instance data</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive motivational/discipline remarks and general classroom discussion were excluded as non-technical content.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 09</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 09 — Operators (Assignment, Relational, Logical) & If-Else</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Types of operators: Assignment, Relational, Logical, Arithmetic</li>
+<li>Assignment operator (=) vs comparison operator (==)</li>
+<li>Relational operators: &gt;, &lt;, ==, !=, &gt;=, &lt;=</li>
+<li>Logical operators: AND (&amp;&amp;), OR (||), short-circuit behavior</li>
+<li>if-else statement structure</li>
+<li>Comparing Strings using .equals()</li>
+<li>Reading input from command line and converting String to int</li>
+<li>Practice: DL eligibility check, delivery charge & discount calculator</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Assignment Operator (=)</b>
+<p>Used to <b>set/assign</b> a value to a variable. It is <b>not</b> mathematical equality. Example: <code>int amount = 200;</code> means "set amount to 200", not "amount equals 200".</p>
+</div>
+
+<div class="card">
+<b>Relational Operators</b>
+<p>Used to <b>compare</b> values and check relationships. They always evaluate to <b>true</b> or <b>false</b> (Java has no concept of "yes/no").</p>
+<ul>
+<li><code>&gt;</code> greater than</li>
+<li><code>&lt;</code> less than</li>
+<li><code>==</code> equal to (comparison, not assignment)</li>
+<li><code>!=</code> not equal to</li>
+<li><code>&gt;=</code> greater than or equal to</li>
+<li><code>&lt;=</code> less than or equal to</li>
+</ul>
+<p>The result of a relational comparison is called a <b>condition</b>.</p>
+</div>
+
+<div class="card">
+<b>Logical Operators — AND (&amp;&amp;)</b>
+<p>Represented by <b>double ampersand</b> (<code>&amp;&amp;</code>). Both conditions must be true for the overall result to be true. If the <b>first condition is false</b>, the second condition is <b>not even checked</b> — the overall result is immediately false. This is called <b>short-circuiting</b>.</p>
+</div>
+
+<div class="card">
+<b>Logical Operators — OR (||)</b>
+<p>Represented by <b>double pipe</b> (<code>||</code>). If <b>either</b> condition is true, the overall result is true. If the <b>first condition is already true</b>, the second condition is <b>not checked</b> — this is the English "or" (not "both"), unlike Hindi "aur" which implies both.</p>
+</div>
+
+<div class="card">
+<b>if-else Statement</b>
+<p>Used to execute a block of code only when a condition is true:</p>
+<pre><code class="language-java">if (condition) {
+    // executes if condition is true
+} else {
+    // executes if condition is false
+}</code></pre>
+<p>Only one of the two blocks executes per run — never both.</p>
+</div>
+
+<div class="card">
+<b>Comparing Strings — Use .equals(), Not ==</b>
+<p>To compare whether two String values are equal, use the <code>.equals()</code> method (a method inside the String class), e.g. <code>state.equals("Karnataka")</code>. This returns true or false based on whether the string content matches.</p>
+</div>
+
+<div class="card">
+<b>Real-World Use of Relational/Logical Operators</b>
+<p>Business rules are typically implemented using these operators — e.g. minimum order quantity checks, free delivery thresholds (e.g. "free delivery above ₹450"), discount eligibility (e.g. "10% off above ₹800"), and age eligibility for a driving license (18–60 years).</p>
+</div>
+
+<div class="card">
+<b>Reading and Converting Command Line Input</b>
+<p>Command line arguments are read as Strings and converted to int using <code>Integer.parseInt()</code> before being used in numeric/relational comparisons.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Assignment vs comparison:</b></p>
+<pre><code class="language-java">int amount = 200; // assignment
+boolean isEqual = (amount == 300); // comparison</code></pre>
+
+<p><b>DL eligibility check using AND:</b></p>
+<pre><code class="language-java">class DLEligibility {
+
+    public static void main(String[] args) {
+        int minAge = 18;
+        int maxAge = 60;
+
+        String ageStr = args[0];
+        int applicantAge = Integer.parseInt(ageStr);
+
+        if (applicantAge >= minAge && applicantAge <= maxAge) {
+            System.out.println("Allowed to apply for DL");
+        } else {
+            System.out.println("You are not allowed to apply for DL, your age is " + applicantAge);
+        }
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java DLEligibility 34</code></pre>
+
+<p><b>Admission eligibility using OR and String comparison:</b></p>
+<pre><code class="language-java">class AdmissionCheck {
+
+    public static void main(String[] args) {
+        String state = args[0];
+        int marks = Integer.parseInt(args[1]);
+
+        if (marks >= 75 || state.equals("Karnataka")) {
+            System.out.println("Allowed to take admission");
+        } else {
+            System.out.println("Not allowed to take admission");
+        }
+
+        System.out.println("Marks: " + marks);
+        System.out.println("State: " + state);
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java AdmissionCheck Karnataka 70</code></pre>
+
+<p><b>Minimum order value for free delivery (JEPTO example):</b></p>
+<pre><code class="language-java">class DeliveryCheck {
+
+    public static void main(String[] args) {
+        int orderValue = Integer.parseInt(args[0]);
+
+        if (orderValue >= 450) {
+            System.out.println("Free delivery");
+        } else {
+            System.out.println("Delivery charges applicable");
+        }
+    }
+
+}</code></pre>
+
+<p><b>Delivery charges & discount calculator (practice exercise):</b></p>
+<pre><code class="language-java">class OrderCharges {
+
+    public static void main(String[] args) {
+        String customerType = args[0]; // "premium" or "non-premium"
+        int price = Integer.parseInt(args[1]);
+
+        int deliveryCharge = 0;
+        int discount = 0;
+
+        if (customerType.equals("premium") || price >= 5000) {
+            deliveryCharge = 0; // free delivery
+            discount = price * 10 / 100; // 10% discount
+        } else {
+            deliveryCharge = 30; // flat delivery charge
+        }
+
+        int totalCartValue = price - discount + deliveryCharge;
+
+        System.out.println("Customer Type: " + customerType);
+        System.out.println("Price: " + price);
+        System.out.println("Delivery Charge: " + deliveryCharge);
+        System.out.println("Discount: " + discount);
+        System.out.println("Total Cart Value: " + totalCartValue);
+    }
+
+}</code></pre>
+<pre><code class="language-bash">java OrderCharges non-premium 500</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>What's the difference between = and ==?</td><td>= is the assignment operator (sets a value); == is the comparison/equality operator.</td></tr>
+<tr><td>In AND (&amp;&amp;), if the first condition is false, is the second condition checked?</td><td>No — this is short-circuiting; the result is immediately false without checking the second condition.</td></tr>
+<tr><td>In OR (||), if the first condition is true, is the second condition checked?</td><td>No — the result is immediately true without checking the second condition.</td></tr>
+<tr><td>Why use .equals() instead of == for comparing Strings?</td><td>.equals() is a String class method used to properly compare string content/value.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Never confuse = (assignment) with == (comparison) — this is a very common beginner mistake.</li>
+<li>Relational and logical operators always return true or false, never "yes/no".</li>
+<li>AND requires both conditions true; OR requires at least one condition true.</li>
+<li>Command line arguments are strings — convert to int using Integer.parseInt() before doing numeric comparisons.</li>
+<li>Use String's .equals() method to compare string values, not direct equality symbols.</li>
+<li>Only one branch of an if-else executes per run — never both.</li>
+<li>Keep business logic simple and match it precisely to the stated requirement (many students in class made logic errors mixing up premium/non-premium delivery and discount rules).</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write a program to check minimum order value eligibility for free delivery (e.g. JEPTO-style: ₹450 and above → free delivery).</li>
+<li>Write the DL eligibility program using AND operator and command line input for age.</li>
+<li>Write the admission eligibility program using OR operator and String comparison.</li>
+<li>Complete the delivery charges & discount calculator: if customer is premium OR cart value ≥ ₹5000 → free delivery + 10% discount; otherwise → flat ₹30 delivery charge, no discount.</li>
+<li>Test all programs with multiple input combinations via command line arguments.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Local, instance, and static variables</li>
+<li><b>Upcoming Topics:</b> Access modifiers (public, private, protected) — mentioned as a separate upcoming topic; increment/decrement and bitwise operators (brief mention, simpler topics)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. Extensive individual student code-review/debugging chatter during the practice session was summarized into general common-mistake points rather than transcribed verbatim, since it repeated the same core logic errors. No new technical content was added.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

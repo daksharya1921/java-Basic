@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 07</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 07 — Variables & Data Types (Primitive vs Non-Primitive)</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>What is a variable</li>
+<li>Variable declaration syntax and the assignment operator</li>
+<li>Primitive vs Non-Primitive data types</li>
+<li>byte, short, int, long, float, double, boolean, char</li>
+<li>Memory size (bits) and value range for each primitive type</li>
+<li>Choosing the right data type based on requirement</li>
+<li>Concatenating static text with dynamic variable values using +</li>
+<li>Practice exercise: declaring order details with correct naming convention</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>What is a Variable?</b>
+<p>A variable is a <b>container that stores data/value</b>. It is called a "variable" because its value <b>may change</b> over time (e.g. an amount can be 100 today and 200 later).</p>
+</div>
+
+<div class="card">
+<b>Variable Declaration Syntax</b>
+<pre><code class="language-java">dataType variableName = value;</code></pre>
+<p>The <code>=</code> here is not mathematical equality — it is the <b>assignment operator</b>, used to assign a value to a variable. Every variable must be given a data type before it can be declared.</p>
+</div>
+
+<div class="card">
+<b>Primitive vs Non-Primitive Data Types</b>
+<p>Java has two categories of data types:</p>
+<ul>
+<li><b>Primitive data types</b> — fixed, built-in types: <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>, <code>double</code>, <code>char</code>, <code>boolean</code>. These are not objects — this is one reason Java is not 100% object-oriented.</li>
+<li><b>Non-primitive data types</b> — any object type (e.g. <code>String</code>, or a custom class like <code>Employee</code>, <code>Account</code>, <code>Payment</code>). The number of non-primitive types is unlimited, since developers can create their own classes.</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Why Multiple Integer Types Exist (byte, short, int, long)</b>
+<p>All of these store integers, but they differ in <b>memory size</b>, which determines their value range:</p>
+<ul>
+<li><code>byte</code> → 8 bits → range: <b>-128 to 127</b></li>
+<li><code>short</code> → 16 bits → range: <b>-32,768 to 32,767</b> (2^16 based)</li>
+<li><code>int</code> → 32 bits</li>
+<li><code>long</code> → 64 bits (largest range among integer types)</li>
+</ul>
+<p>The range is calculated using the formula based on <b>2^(number of bits)</b>, split between negative and positive values (0 is included on the positive side).</p>
+</div>
+
+<div class="card">
+<b>Decimal Data Types</b>
+<ul>
+<li><code>float</code> → 32 bits — lower range/precision for decimals</li>
+<li><code>double</code> → 64 bits — larger range, used when more precision/range is needed for decimal values</li>
+</ul>
+<p>Instructor noted <code>float</code> is the "lowest" for decimals and <code>double</code> is used for a bigger range, mirroring how <code>byte</code> is lowest and <code>long</code> is highest among integer types.</p>
+</div>
+
+<div class="card">
+<b>Boolean and Char</b>
+<ul>
+<li><code>boolean</code> → stores only <b>true</b> or <b>false</b> (e.g. used for a flag like "is work done or not")</li>
+<li><code>char</code> → stores a <b>single character</b> (e.g. <code>'A'</code>)</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Choosing the Right Data Type</b>
+<p>Before writing code, decide the data type based on the actual requirement/attribute. Example: for employee details — name/address would be String, age could be int/short/byte, salary could be int/double, and a "work done" flag would be boolean.</p>
+</div>
+
+<div class="card">
+<b>Out-of-Range Values Fail to Compile</b>
+<p>If a value assigned to a variable exceeds its data type's range (e.g. assigning 128 or 130 to a <code>byte</code>, whose max is 127), the compiler throws an error: <em>incompatible types: possible lossy conversion from int to byte</em>. In such cases, choose a larger type (e.g. <code>short</code> or <code>int</code>).</p>
+</div>
+
+<div class="card">
+<b>Concatenating Static Text with Variable Values</b>
+<p>To print a mix of fixed text (static) and a variable's value (dynamic), use the <code>+</code> operator to join them.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<pre><code class="language-java">int amount = 100;
+amount = 200; // value changes — this is why it's called a "variable"</code></pre>
+
+<pre><code class="language-java">boolean status = true;</code></pre>
+
+<pre><code class="language-java">class Age {
+
+    public static void main(String[] args) {
+        byte age = 18;
+        System.out.println("Age is " + age + " years");
+    }
+
+}</code></pre>
+
+<p><b>Out-of-range example (fails to compile):</b></p>
+<pre><code class="language-java">byte age = 130; // ERROR: incompatible types, possible lossy conversion from int to byte
+// byte range is -128 to 127</code></pre>
+
+<p><b>Using short instead when byte's range is insufficient:</b></p>
+<pre><code class="language-java">short amount = 5000;</code></pre>
+
+<p><b>Float and double for decimals:</b></p>
+<pre><code class="language-java">float temperature = 98.6f; // 'f' suffix required for float
+double piValue = 3.14159; // larger range/precision</code></pre>
+
+<p><b>Char example:</b></p>
+<pre><code class="language-java">char grade = 'A';</code></pre>
+
+<p><b>Practice exercise — Order details with correct naming convention:</b></p>
+<pre><code class="language-java">class OrderDetails {
+
+    public static void main(String[] args) {
+        int orderId = 101;
+        String productName = "Laptop";
+        double price = 100.0;
+        double gst = 18.0;
+        double totalCartValue = 118.0;
+        String custName = "Rahul";
+        String pickupAddress = "MG Road";
+        String deliveryAddress = "Whitefield";
+        String deliveryStatus = "In Transit";
+        boolean isOpenBoxDelivery = true;
+
+        System.out.println("Order ID: " + orderId);
+        System.out.println("Product: " + productName);
+        System.out.println("Total Cart Value: " + totalCartValue);
+    }
+
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Why do we have multiple integer types (byte, short, int, long) when all store integers?</td><td>They differ in memory size (bits), which determines their value range — chosen based on how large the number needs to be.</td></tr>
+<tr><td>What happens if I assign a value outside a type's range (e.g. 130 to a byte)?</td><td>Compilation fails with an "incompatible types / possible lossy conversion" error — use a larger data type instead.</td></tr>
+<tr><td>Is boolean size dependent on JVM?</td><td>Raised in class as a point to verify/cross-check; not conclusively answered in this session.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Decide the data type based on the actual requirement before writing code.</li>
+<li>Variable naming must follow camelCase — first word lowercase, each subsequent word capitalized (e.g. <code>orderId</code>, not <code>OrderID</code> or <code>order_ID</code>).</li>
+<li>Do not add unnecessary underscores in variable names unless genuinely required.</li>
+<li>String values must always be in double quotes; an unclosed quote causes an "unclosed character literal" compiler error.</li>
+<li>Use boolean (not String) for true/false flags — e.g. <code>isOpenBoxDelivery</code> should be boolean, not a string like "true"/"yes".</li>
+<li>Class names must start with a capital letter (e.g. <code>OrderDetails</code>, not <code>orderDetails</code>).</li>
+<li>Naming convention mistakes are treated very seriously — instructor emphasized that incorrect capitalization (e.g. a variable starting with a capital letter) is an immediate red flag in real code review/interviews.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Explore all primitive data types with sample declarations.</li>
+<li>Write 5–10 programs identifying attributes for different real-world scenarios (e.g. Zomato/Swiggy order, Amazon order, IRCTC train ticket booking) and declare them as class variables with correct data types and naming convention.</li>
+<li>Fix variable naming convention mistakes by reviewing old class recordings.</li>
+<li>Practice declaring variables using each data type: byte, short, int, long, float, double, char, boolean.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Java identifiers, reserved keywords, naming convention basics</li>
+<li><b>Upcoming Topics:</b> Non-primitive data types in more depth (classes as types), continued naming convention practice</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. Live in-class naming-convention corrections (individual student feedback) were summarized as general rules rather than transcribed student-by-student, since they repeated the same core point. No new technical content was added.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

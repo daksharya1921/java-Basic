@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 08</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 08 — Local, Instance & Static Variables</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Types of variables in Java: Local, Instance, Static</li>
+<li>Local variables — declared inside a method, scope limited to that method</li>
+<li>Instance variables — declared inside a class, outside methods; belong to the object</li>
+<li>Static variables — belong to the class; one copy shared across all objects</li>
+<li>Memory location for each variable type (Stack vs Heap vs MetaSpace)</li>
+<li>Accessing static variables using ClassName.variableName</li>
+<li>When to use static vs instance (e.g. GST/interest rate example)</li>
+<li>Practice: calculating total amount using local and static variables together</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Local Variable</b>
+<p>A variable declared <b>inside a method</b> (or block). Its scope is limited to that method only — it <b>cannot be accessed from another method</b>. Trying to access a local variable outside the method where it's declared causes a compilation error: <em>cannot find symbol</em>.</p>
+</div>
+
+<div class="card">
+<b>Instance Variable</b>
+<p>A variable declared <b>inside the class but outside any method</b>. It <b>belongs to the object</b> (also called an "instance"). Every object created from the class gets its <b>own separate copy</b> of the instance variable. Example: in a banking application, "balance" is an instance variable — each user (object) has their own balance value, but they all share the same variable definition (e.g. <code>balance</code>) in the class.</p>
+</div>
+
+<div class="card">
+<b>Static Variable</b>
+<p>A variable declared with the <code>static</code> keyword. It <b>belongs to the class</b>, not to any individual object — there is <b>only one copy</b> shared across <b>all objects</b> of that class. Used when a value is the <b>same for every object</b> — e.g. an interest rate or GST percentage that applies equally to all customers/products, so there's no need to store a separate copy per object.</p>
+</div>
+
+<div class="card">
+<b>Why Use Static Instead of Instance (Example: GST)</b>
+<p>If GST (18%) were declared as a non-static (instance) variable, then calculating GST for 1 lakh customers would create 1 lakh separate copies of the same value — wasting memory. Since the value is identical for everyone, it should be <b>static</b>, so only one copy exists and is shared by all.</p>
+</div>
+
+<div class="card">
+<b>Accessing Static Variables</b>
+<p>Static members are accessed using the class name, not an object: <code>ClassName.variableName</code>. This is the same reason the main method can be called by JVM without creating an object — because <code>main</code> is static.</p>
+</div>
+
+<div class="card">
+<b>Memory Location of Each Variable Type</b>
+<ul>
+<li><b>Local variable</b> → stored in the <b>Stack</b></li>
+<li><b>Instance variable</b> → stored in the <b>Heap</b> (since it belongs to the object, and objects live in the heap)</li>
+<li><b>Static variable</b> → stored in the <b>Heap</b> (prior to Java 8 it was stored in PermGen/MetaSpace; from Java 8 onward, static variables are part of the Heap)</li>
+<li><b>Class metadata/bytecode</b> → stored in <b>MetaSpace</b> (also called the method area)</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Declaration vs Assignment</b>
+<p>Declaration = specifying the data type and name of a variable. Assignment = giving that variable a value using the <code>=</code> operator. These can happen together (<code>int balance = 2000;</code>) or separately (declare first, assign later).</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Local variable — only accessible within its own method:</b></p>
+<pre><code class="language-java">class Variables {
+
+    public static void main(String[] args) {
+        int balance = 2000; // local variable — scope limited to main()
+        System.out.println(balance);
+    }
+
+    public static void view() {
+        System.out.println(balance); // ERROR: cannot find symbol — balance not visible here
+    }
+
+}</code></pre>
+
+<p><b>Instance variable — accessible by any method in the class:</b></p>
+<pre><code class="language-java">class Variables {
+
+    int amount = 2000; // instance variable — belongs to the object
+
+    public static void main(String[] args) {
+        // instance variable cannot be accessed directly from a static method
+        // without an object reference (covered when objects are introduced)
+    }
+
+}</code></pre>
+
+<p><b>Static variable — shared across all objects, accessed via class name:</b></p>
+<pre><code class="language-java">class Variables {
+
+    static int interestRate = 5;
+
+    public static void main(String[] args) {
+        System.out.println(Variables.interestRate); // accessed using ClassName.variableName
+    }
+
+}</code></pre>
+
+<p><b>Practice exercise — total amount using local + static variables:</b></p>
+<pre><code class="language-java">class ProductTotal {
+
+    static int gst = 18; // static — same GST slab applies to all products in this range
+
+    public static void main(String[] args) {
+        String productName = args[0];       // local
+        int price = Integer.parseInt(args[1]); // local
+
+        int gstAmount = (price * gst) / 100;
+        int totalPrice = price + gstAmount;
+
+        System.out.println("Product: " + productName);
+        System.out.println("Total Price: " + totalPrice);
+    }
+
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Why not just declare GST as an instance variable instead of static?</td><td>Since GST (18%) is identical for every product/customer, making it instance would create a wasteful duplicate copy per object; static keeps just one shared copy.</td></tr>
+<tr><td>Where is a local variable stored?</td><td>The Stack.</td></tr>
+<tr><td>Where is an instance variable stored?</td><td>The Heap.</td></tr>
+<tr><td>Where is a static variable stored?</td><td>The Heap (from Java 8 onward; previously PermGen/MetaSpace before Java 8).</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Local variables cannot be accessed outside the method they're declared in — this is a common source of "cannot find symbol" compiler errors.</li>
+<li>Instance variables belong to the object, not the class — each object gets its own copy.</li>
+<li>Static variables belong to the class — only one shared copy exists for all objects.</li>
+<li>Use static for values that are genuinely the same across all objects (e.g. tax rates, slabs); use instance for values that vary per object (e.g. individual account balance).</li>
+<li>Always compile using the full file name with the <code>.java</code> extension; run using only the class name (no extension).</li>
+<li>Hardcoded GST/tax values inside logic should instead use a properly typed static variable, not a string or hardcoded literal.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Declare a local variable, then try to access it from a different method — observe and understand the compilation error.</li>
+<li>Declare an instance variable outside a method and access it from within a method.</li>
+<li>Declare a static variable and access it using ClassName.variableName.</li>
+<li>Write a program to calculate the total payable amount for a product (price + 18% GST) using local variables for product-specific data and a static variable for GST.</li>
+<li>Write 10–20 additional Java classes daily, identifying which fields in real-world scenarios (Zomato order, Amazon order, SBI interest calculation, etc.) should be local, instance, or static.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Variables and data types (primitive vs non-primitive)</li>
+<li><b>Upcoming Topics:</b> Objects, constructors, calling methods and variables using object references</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. Repeated in-class discipline/motivation remarks and individual student code-review chatter were excluded as non-technical content. No new technical content was added beyond what the instructor taught.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>
