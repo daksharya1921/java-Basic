@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 26</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+.treebox{background:#1e1e2f;color:#d4d4f7;padding:16px;border-radius:10px;font-family:monospace;line-height:1.8;text-align:center;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 26 — Inheritance</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Recap: encapsulation — why it matters (data control, not just "hiding for hiding's sake")</li>
+<li>What inheritance is — the real-world parent/child analogy</li>
+<li>Why inheritance exists — code reusability, avoiding rebuilding tested functionality</li>
+<li>extends keyword — establishing parent-child relationship</li>
+<li>Superclass and Subclass terminology</li>
+<li>Object class as the implicit root parent of every Java class</li>
+<li>Multi-level inheritance — grandparent, parent, child hierarchy</li>
+<li>"IS-A" relationship (e.g. electronic product IS-A product)</li>
+<li>Child class can add its own properties in addition to inherited ones</li>
+<li>Practice: Product → Electronic Product; Product → Clothing Product → Men's/Women's Clothing</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Recap: Why Encapsulation Matters</b>
+<p>Encapsulation isn't just "hiding for the sake of hiding" — it prevents <b>data discrepancy</b> caused by uncontrolled modification from other classes. When reviewing code (e.g. in interviews), the correct evaluation lens is "does this follow OOPs principles," not just "does it compile and run."</p>
+</div>
+
+<div class="card">
+<b>What is Inheritance? (Real-World Analogy)</b>
+<p>Just like a child <b>automatically inherits</b> their parent's property/wealth without starting from zero, a class can inherit the properties and functionality of another class. Example: if a parent has 100 acres of land and the child adds 10 more acres through their own effort, the child ends up with 110 acres total — they didn't have to "earn" the original 100 acres from scratch.</p>
+</div>
+
+<div class="card">
+<b>Why Inheritance Exists — Code Reusability</b>
+<p>If functionality already exists in a class (e.g. a notification-sending class running stably in production for years, already tested and bug-fixed), rewriting similar functionality from scratch for a new class wastes significant time and reintroduces risk (new bugs, re-testing, re-approval cycles). Inheritance lets a new class <b>reuse</b> that existing, proven functionality instead.</p>
+</div>
+
+<div class="card">
+<b>extends Keyword — Establishing the Relationship</b>
+<pre><code class="language-java">class ResellerNotification extends Notification {
+    // automatically gets access to Notification's members
+}</code></pre>
+<p>Using <code>extends</code> makes the class on the left the <b>child</b> and the class on the right the <b>parent</b>. All functionality declared in the parent becomes available in the child without rewriting it.</p>
+</div>
+
+<div class="card">
+<b>Superclass and Subclass Terminology</b>
+<ul>
+<li><b>Superclass</b> (or parent class) — the class being inherited from</li>
+<li><b>Subclass</b> (or child class) — the class that inherits, using <code>extends</code></li>
+</ul>
+</div>
+
+<div class="card">
+<b>Object Class — The Universal Root Parent</b>
+<p>Recap/reinforcement: every class in Java is, directly or indirectly, a child of the built-in <code>Object</code> class. This is why methods like <code>hashCode()</code> are callable on any object even if never explicitly written in that class or its immediate parent — they're inherited all the way from Object, at the top of every inheritance chain.</p>
+</div>
+
+<div class="card">
+<b>Multi-Level Inheritance</b>
+<p>Inheritance chains can go several levels deep — a class can have a parent, which itself has a parent, and so on. A child class at the bottom of such a chain has access to properties from <b>all</b> its ancestors (parent, grandparent, etc.), not just its immediate parent.</p>
+</div>
+
+<div class="card">
+<b>"IS-A" Relationship</b>
+<p>Inheritance models an <b>"is-a"</b> relationship: an Electronic Product <b>is a</b> type of Product; Men's Clothing <b>is a</b> type of Clothing Product, which itself <b>is a</b> type of Product. If this natural "is-a" relationship holds true, inheritance is the appropriate design choice.</p>
+</div>
+
+<div class="card">
+<b>Child Class Can Add Its Own Properties</b>
+<p>A subclass isn't limited to only the inherited members — it can declare <b>additional fields and methods</b> specific to itself. Example: a general <code>Product</code> class might have id/name/price, while <code>ElectronicProduct</code> (its child) additionally has a <code>warrantyYears</code> field and a <code>warrantyDetails()</code> method that general products don't have.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Reusing existing notification functionality via inheritance:</b></p>
+<pre><code class="language-java">package com.amazon.retail.notification;
+
+class Notification {
+    public void sendNotification(String emailAddress, String message) {
+        // existing, tested logic — e.g. connects to mail server and sends email
+        System.out.println("Sending email to " + emailAddress + ": " + message);
+    }
+}</code></pre>
+<pre><code class="language-java">class ResellerNotification extends Notification {
+    // no need to rewrite sendNotification — inherited from Notification
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        ResellerNotification resellerNotification = new ResellerNotification();
+        resellerNotification.sendNotification("reseller@example.com", "Stock is low, please refill");
+        // reusing parent class functionality — nothing new written here
+    }
+}</code></pre>
+
+<p><b>Simple example — reusing fields and a method:</b></p>
+<pre><code class="language-java">class UserManagement {
+    String type;
+    String location;
+
+    void doSomething() {
+        System.out.println("Doing something in UserManagement");
+    }
+}</code></pre>
+<pre><code class="language-java">class User extends UserManagement {
+    // no new members — everything reused from parent
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        User user = new User();
+        user.doSomething();      // inherited method, works even though User never wrote it
+        System.out.println(user.type);     // inherited field
+        System.out.println(user.location); // inherited field
+    }
+}</code></pre>
+
+<p><b>Product hierarchy — Electronic Product adds its own property:</b></p>
+<pre><code class="language-java">class Product {
+    public String productId;
+    public String productName;
+    public int price;
+
+    public void productDetails() {
+        System.out.println(productId + " " + productName + " " + price);
+    }
+}</code></pre>
+<pre><code class="language-java">class ElectronicProduct extends Product {
+    public int warrantyYears = 2; // additional property, specific to electronic products
+
+    public void warrantyDetails() {
+        System.out.println("Warranty: " + warrantyYears + " years");
+    }
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        ElectronicProduct ep = new ElectronicProduct();
+        ep.productId = "P1";
+        ep.productName = "Laptop";
+        ep.price = 50000;
+
+        ep.productDetails();   // inherited from Product
+        ep.warrantyDetails();  // defined in ElectronicProduct itself
+        // total: 3 inherited fields + 1 own field = 4 fields available in ElectronicProduct
+    }
+}</code></pre>
+
+<p><b>Practice exercise — multi-level hierarchy:</b></p>
+<div class="treebox">
+Product<br>
+&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+Clothing Product<br>
+&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\<br>
+Men's Clothing&nbsp;&nbsp;&nbsp;&nbsp;Women's Clothing
+</div>
+<pre><code class="language-java">class Product {
+    public String productId;
+    public String productName;
+    public int price;
+}</code></pre>
+<pre><code class="language-java">class ClothingProduct extends Product {
+    public String size;
+    public String texture;
+    public String brand;
+}</code></pre>
+<pre><code class="language-java">class MensClothing extends ClothingProduct {
+    // MensClothing has: its own fields (if any) + ClothingProduct's fields + Product's fields
+}</code></pre>
+<pre><code class="language-java">class WomensClothing extends ClothingProduct {
+    // WomensClothing has: its own fields (if any) + ClothingProduct's fields + Product's fields
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Why not just write new functionality from scratch instead of using inheritance?</td><td>Because reusing existing, already-tested, production-proven code saves significant time and avoids reintroducing bugs that come with a completely new implementation.</td></tr>
+<tr><td>How is a class able to call methods (like hashCode()) it never wrote?</td><td>Through inheritance — every class is implicitly a child of the Object class, which provides such methods to all classes.</td></tr>
+<tr><td>What properties does a class at the bottom of a multi-level hierarchy have access to?</td><td>Its own declared properties, plus everything inherited from its immediate parent, plus everything from all ancestors further up the chain (grandparent, etc.).</td></tr>
+<tr><td>How do you decide if inheritance is the right relationship to use?</td><td>Check whether an "is-a" relationship genuinely holds — e.g. "Electronic Product is a Product" makes sense, so inheritance fits.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Use extends to create a parent-child (superclass-subclass) relationship between classes.</li>
+<li>Before writing new functionality, check whether similar functionality already exists and can be reused via inheritance.</li>
+<li>A subclass can both reuse inherited members and add its own new fields/methods.</li>
+<li>Always verify an "is-a" relationship makes logical sense before applying inheritance — don't force inheritance where it doesn't naturally fit.</li>
+<li>Remember to save files (Ctrl+S) before compiling — several students in class lost time due to unsaved changes.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write a Notification parent class and a child class that reuses its sendNotification() method without rewriting it.</li>
+<li>Build the Product → ElectronicProduct hierarchy, adding a warranty-related field and method specific to ElectronicProduct.</li>
+<li>Build the multi-level Product → ClothingProduct → MensClothing/WomensClothing hierarchy, adding relevant fields at each level (size, texture, brand for ClothingProduct; category-specific fields for Men's/Women's).</li>
+<li>Trace and confirm which fields/methods are available at each level of the hierarchy (own + inherited from all ancestors).</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> OOP introduction and Encapsulation</li>
+<li><b>Upcoming Topics:</b> Abstraction and Polymorphism — the remaining two OOPs pillars</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, the hierarchy tree visual, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive live classroom troubleshooting (screen-share issues, individual student code review) was excluded/summarized as non-technical or already-covered content.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 27</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+.treebox{background:#1e1e2f;color:#d4d4f7;padding:16px;border-radius:10px;font-family:monospace;line-height:1.8;text-align:center;margin-top:10px;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 27 — Types of Inheritance & Code Review Process</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Recap: inheritance = reusing existing, tested code</li>
+<li>Real-world code review process: static code review vs peer review</li>
+<li>Why reusability matters for company performance reviews</li>
+<li>Private members are NOT inherited by child classes</li>
+<li>Practical example: Account → SavingAccount → PremiumSavingAccount</li>
+<li>Types of inheritance: Single, Multi-level, Hierarchical</li>
+<li>Multiple inheritance — NOT supported in Java (Diamond Problem)</li>
+<li>Reinforcing the "IS-A" relationship test for valid inheritance design</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Recap: Inheritance = Code Reusability</b>
+<p>Before writing new code, always check whether similar functionality already exists that can be <b>reused via inheritance</b>, rather than rebuilding from scratch — this saves significant development time.</p>
+</div>
+
+<div class="card">
+<b>Real-World Code Review Process</b>
+<p>In companies, code doesn't go directly to production after being written. It typically goes through:</p>
+<ul>
+<li><b>Static code review</b> — automated tools (e.g. SonarQube, PMD, Checkstyle) that check things like unused variables, naming conventions, method/class length limits (e.g. no method over 200 lines), and other configurable rules.</li>
+<li><b>Peer review (PR)</b> — a senior developer or reviewer manually checks whether the code implements the business requirement correctly, and evaluates <b>how</b> it was implemented (structure, reusability, unnecessary duplication, proper use of local vs instance variables, etc.).</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Why This Matters for Your Career</b>
+<p>How well you apply reusability and good design (like inheritance) directly affects <b>peer review feedback</b>, which factors into performance reviews and appraisals/raises. Reviewers notice things like: could this have reused an existing class instead of taking days to rewrite similar logic? Following OOPs concepts properly (not just "knowing" them) leads to smoother career growth.</p>
+</div>
+
+<div class="card">
+<b>Private Members Are NOT Inherited</b>
+<p>When a class extends a parent, it gets access to <b>all non-private</b> members (fields and methods) of the parent. Anything declared <code>private</code> in the parent remains <b>inaccessible</b> to the child class — private scope is strictly limited to the class where it's declared, regardless of inheritance.</p>
+</div>
+
+<div class="card">
+<b>Child Class Adds Its Own Requirements</b>
+<p>A child class reuses common functionality from its parent and additionally implements whatever is <b>specific to itself</b>. Example: a general <code>Account</code> class has common operations (open, close, approve); a <code>SavingAccount</code> subclass reuses those and adds its own <code>calculateInterest()</code> method, since interest calculation is specific to savings accounts.</p>
+</div>
+
+<div class="card">
+<b>Single Inheritance</b>
+<p>One class extends exactly one other class — a simple parent → child relationship.</p>
+<div class="treebox">Account → SavingAccount</div>
+</div>
+
+<div class="card">
+<b>Multi-Level Inheritance</b>
+<p>A chain of inheritance spanning more than two levels — like a multi-story building. A grandchild class inherits from a child class, which itself inherits from a parent class.</p>
+<div class="treebox">Account → SavingAccount → PremiumSavingAccount</div>
+</div>
+
+<div class="card">
+<b>Hierarchical Inheritance</b>
+<p>One parent class is extended by <b>multiple different child classes</b>, each independently. Example: both <code>SavingAccount</code> and <code>CurrentAccount</code> extend the same <code>Account</code> parent class.</p>
+<div class="treebox">Account<br>/&nbsp;&nbsp;&nbsp;\<br>SavingAccount&nbsp;&nbsp;&nbsp;CurrentAccount</div>
+</div>
+
+<div class="card">
+<b>Multiple Inheritance — NOT Supported in Java</b>
+<p><b>Multiple inheritance</b> means one class trying to extend <b>more than one parent class directly</b>. This is <b>not supported</b> in Java (unlike some other languages). This structure resembles a diamond shape and is famously known as the <b>Diamond Problem</b> (or "Death of Diamond" / DOD) — a classic interview question. The full reasoning behind why it causes issues is better understood once <b>method overriding</b> is covered.</p>
+<div class="treebox">ParentA&nbsp;&nbsp;&nbsp;ParentB<br>&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/<br>&nbsp;&nbsp;&nbsp;Child<br><small>(NOT allowed in Java — a class cannot extend two classes)</small></div>
+</div>
+
+<div class="card">
+<b>The "IS-A" Test — Validating Inheritance Design</b>
+<p>Before creating an inheritance relationship, check whether it forms a <b>true, real-world "is-a" statement</b>. Example: "Dentist is a Doctor" ✅ makes sense — valid inheritance. But a Cardiologist should <b>not</b> extend Dentist just because both are doctors — "Cardiologist is a Dentist" ❌ doesn't hold true in the real world. Both should instead independently extend the common parent, <code>Doctor</code> (hierarchical inheritance). Java will technically compile an illogical relationship, but it violates good design — the code should reflect reality.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Base Account class:</b></p>
+<pre><code class="language-java">class Account {
+    public int balance;
+    public String accountHolderName;
+    private String userId; // private — will NOT be inherited by children
+
+    public void openAccount() {
+        System.out.println("Account opened");
+    }
+
+    public void closeAccount() {
+        System.out.println("Account closed");
+    }
+
+    public void approveAccount() {
+        System.out.println("Account approved");
+    }
+}</code></pre>
+
+<p><b>SavingAccount — reuses parent + adds its own method:</b></p>
+<pre><code class="language-java">class SavingAccount extends Account {
+
+    public int calculateInterest(int amount) {
+        double rate = 5; // 5%
+        return (int) (amount * rate / 100);
+    }
+
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        SavingAccount saving = new SavingAccount();
+        saving.balance = 1000;              // inherited from Account
+        saving.openAccount();               // inherited from Account
+        saving.approveAccount();            // inherited from Account
+        int interest = saving.calculateInterest(1000); // own method
+        System.out.println(interest); // 50
+        // saving.userId -- NOT accessible, private in parent
+    }
+}</code></pre>
+
+<p><b>Hierarchical inheritance — CurrentAccount also extends Account:</b></p>
+<pre><code class="language-java">class CurrentAccount extends Account {
+
+    public int calculateInterest(int amount) {
+        return 0; // current accounts don't earn interest
+    }
+
+    public int forexCharges = 250; // flat charge per forex transaction, unlike savings which may be free
+
+}</code></pre>
+
+<p><b>Multi-level inheritance — PremiumSavingAccount extends SavingAccount:</b></p>
+<pre><code class="language-java">class PremiumSavingAccount extends SavingAccount {
+
+    public void airportLoungeAccess() {
+        System.out.println("Free airport lounge access");
+    }
+
+    public int movieDiscountPercent = 10;
+
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        PremiumSavingAccount premium = new PremiumSavingAccount();
+        premium.openAccount();          // from Account (grandparent)
+        premium.calculateInterest(1000); // from SavingAccount (parent)
+        premium.airportLoungeAccess();   // own method
+        // has access to fields/methods from ALL ancestors: Account + SavingAccount + itself
+    }
+}</code></pre>
+
+<p><b>Valid vs invalid "IS-A" inheritance design:</b></p>
+<pre><code class="language-java">class Doctor { }
+
+class Dentist extends Doctor { }     // valid — "Dentist is a Doctor" is true
+class Cardiologist extends Doctor { } // valid — "Cardiologist is a Doctor" is true
+
+// INVALID design (compiles, but logically wrong):
+// class Cardiologist extends Dentist { }
+// "Cardiologist is a Dentist" is NOT true in the real world</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Why does a current account's calculateInterest() return 0?</td><td>This reflects real banking behavior — company/current accounts typically don't earn interest, unlike individual savings accounts.</td></tr>
+<tr><td>Are there specific tools used for static code review?</td><td>Yes — examples mentioned include SonarQube, PMD, and Checkstyle, among many available options; companies configure their own rule sets.</td></tr>
+<tr><td>Is multiple inheritance supported in Java?</td><td>No — a class cannot directly extend more than one class; this is known as the Diamond Problem and is avoided by design in Java (interfaces offer an alternative, covered later).</td></tr>
+<tr><td>How do you know if an inheritance relationship is well-designed?</td><td>Apply the "is-a" test — the relationship should describe something that's genuinely true in the real world, not just something that happens to compile.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Private members are never inherited — they remain accessible only within their declaring class.</li>
+<li>Always validate inheritance relationships against the real-world "is-a" test before implementing them.</li>
+<li>Don't chain unrelated classes together just because they share a common ancestor — use hierarchical inheritance (both extending the same parent) instead of forcing an invalid parent-child relationship between siblings.</li>
+<li>Java does not support multiple inheritance (a class extending two classes directly) — this is a deliberate design decision to avoid the Diamond Problem.</li>
+<li>Code reusability and clean design directly impact real peer review feedback and performance evaluations in the industry.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Build the Account → SavingAccount → PremiumSavingAccount hierarchy (multi-level), plus CurrentAccount extending Account separately (hierarchical), using a real domain of your choice (not vehicle/car/student examples).</li>
+<li>For each subclass, verify the "is-a" relationship is genuinely true before implementing it.</li>
+<li>Identify at least one example each of single, multi-level, and hierarchical inheritance from a real-world domain (e-commerce, healthcare, banking, etc.).</li>
+<li>Practice explaining, out loud, why multiple inheritance isn't allowed in Java (in preparation for interview questions on the Diamond Problem).</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Inheritance — extends keyword, superclass/subclass basics</li>
+<li><b>Upcoming Topics:</b> Method overriding (needed to fully understand the Diamond Problem); Polymorphism</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, the hierarchy diagrams, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive live classroom code-review dialogue and the workplace-culture storytelling were summarized into the relevant concept cards rather than transcribed as dialogue.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

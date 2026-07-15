@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 24</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 24 — StringBuilder Practical Use Cases & Software Design Principles</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>When to use String vs StringBuilder/StringBuffer — practical criteria</li>
+<li>Use case: dynamic email/notification templates (order confirmation example)</li>
+<li>StringBuilder.append() — modifying without creating new objects repeatedly</li>
+<li>Practice: dynamic SQL query builder based on conditional input</li>
+<li>Constructors should not contain business logic (only field initialization)</li>
+<li>Software design principles: Maintainability, Reusability, Modularity</li>
+<li>OOP as the foundation for good application design (LLD, brief mention of SOLID)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>When to Use String vs StringBuilder</b>
+<p>Use plain <b>String</b> when the value is <b>static/fixed</b> (e.g. a fixed message or label that won't be modified). Use <b>StringBuilder/StringBuffer</b> when content needs to be <b>dynamically constructed or modified repeatedly</b> — e.g. templates where placeholders (name, order status, date) change per user. Using String for frequently-modified content would create a huge number of throwaway objects (since Strings are immutable), risking memory issues at scale.</p>
+</div>
+
+<div class="card">
+<b>Real-World Use Case: Dynamic Notification Templates</b>
+<p>Example: an e-commerce order confirmation email — "Hi [name], thank you for placing your order for [item]. Your order is currently [status]. You will receive it by [date]." This same template structure is reused for <b>every customer</b>, with different values substituted each time. Using StringBuilder, the <b>same object</b> is appended/modified per request instead of creating a brand-new String object combination every time — critical when generating potentially millions of such messages.</p>
+</div>
+
+<div class="card">
+<b>StringBuilder.append() — No New Object Per Modification</b>
+<p>Calling <code>.append()</code> on a StringBuilder modifies the <b>existing</b> object in place — it does not create a new object each time, unlike String concatenation. This is the core reason StringBuilder is preferred for repeated/dynamic text construction.</p>
+</div>
+
+<div class="card">
+<b>Constructors Should Only Initialize State</b>
+<p>Business logic (e.g. constructing a SQL query, sending a notification) should generally <b>not</b> be written inside a constructor — a constructor's job is to <b>initialize the object's fields</b>. Business logic belongs in separate, purpose-named methods, unless there's a specific requirement forcing otherwise.</p>
+</div>
+
+<div class="card">
+<b>Practice: Dynamic Query Builder</b>
+<p>Exercise: build a SQL query string dynamically based on which inputs are provided:</p>
+<ul>
+<li>No input → <code>SELECT * FROM employee</code> (get all records)</li>
+<li>Employee ID provided → <code>SELECT * FROM employee WHERE id = &lt;value&gt;</code></li>
+<li>Salary provided (no ID) → <code>SELECT * FROM employee WHERE salary &gt; &lt;value&gt;</code></li>
+</ul>
+<p>This demonstrates conditionally building a String/query using StringBuilder based on runtime input, rather than hardcoding a single fixed query.</p>
+</div>
+
+<div class="card">
+<b>Software Design Principle #1: Maintainability</b>
+<p>Code in real companies typically lives for <b>10–15+ years</b>. Just like a physical product needs to be repairable/serviceable over its lifetime, code needs to be <b>maintainable</b> — meaning other developers (including ones who didn't originally write it) should be able to understand it, fix issues, and extend it without excessive difficulty.</p>
+</div>
+
+<div class="card">
+<b>Software Design Principle #2: Reusability</b>
+<p>Code should not be built for a single, overly narrow use case only. Example: an email template built for "order placed" notifications should ideally also be usable (with minor changes) for "order cancelled" or "payment failed" notifications, rather than requiring a completely separate implementation for every slightly different scenario. Writing reusable code saves significant development and testing time on future, similar requirements.</p>
+</div>
+
+<div class="card">
+<b>Software Design Principle #3: Modularity</b>
+<p>Large applications (real systems may have 100,000+ classes) should be organized into <b>logically separated modules</b> (e.g. payment module, cart module, search module) — similar to how a house has separate rooms for different purposes (kitchen, bedroom, study). This way, if an issue is reported in one area (e.g. "UPI payment not working"), developers can focus only on the relevant module, without the risk of unrelated systems being impacted, and without having to search through unrelated code.</p>
+</div>
+
+<div class="card">
+<b>OOP as the Foundation for Application Design</b>
+<p>Object-Oriented Programming (OOP) is the foundation for designing applications that are maintainable, reusable, and modular — using objects as the central building blocks. How well an application achieves these three qualities largely depends on how well OOP principles are applied. This connects to <b>Low-Level Design (LLD)</b>, which is heavily based on OOP concepts, and to design principles like <b>SOLID</b> (mentioned as an upcoming topic).</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Dynamic notification email using StringBuilder:</b></p>
+<pre><code class="language-java">class EmailTemplate {
+    String name;
+    String item;
+    String status;
+    String deliveryDate;
+
+    public EmailTemplate(String name, String item, String status, String deliveryDate) {
+        this.name = name;
+        this.item = item;
+        this.status = status;
+        this.deliveryDate = deliveryDate;
+    }
+}</code></pre>
+
+<pre><code class="language-java">class OrderNotification {
+
+    public String sendNotification(EmailTemplate emailMessage) {
+        StringBuilder finalMessage = new StringBuilder();
+
+        finalMessage.append("Dear ")
+                    .append(emailMessage.name)
+                    .append(", thank you for placing an order for item ")
+                    .append(emailMessage.item)
+                    .append(". Your order status is ")
+                    .append(emailMessage.status)
+                    .append(". You will receive it by ")
+                    .append(emailMessage.deliveryDate)
+                    .append(".");
+
+        return finalMessage.toString();
+    }
+
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        EmailTemplate msg1 = new EmailTemplate("Krishna", "Laptop", "Packed", "10 July");
+        OrderNotification notifier = new OrderNotification();
+        String email = notifier.sendNotification(msg1);
+        System.out.println(email);
+    }
+}</code></pre>
+
+<p><b>Practice exercise — dynamic SQL query builder:</b></p>
+<pre><code class="language-java">class QueryConstructor {
+
+    public String constructQuery(String employeeId, String salary) {
+        StringBuilder query = new StringBuilder("SELECT * FROM employee");
+
+        if (employeeId != null) {
+            query.append(" WHERE id = ").append(employeeId);
+        } else if (salary != null) {
+            query.append(" WHERE salary > ").append(salary);
+        }
+
+        return query.toString();
+    }
+
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        QueryConstructor qc = new QueryConstructor();
+
+        System.out.println(qc.constructQuery(null, null));       // SELECT * FROM employee
+        System.out.println(qc.constructQuery("101", null));      // SELECT * FROM employee WHERE id = 101
+        System.out.println(qc.constructQuery(null, "50000"));    // SELECT * FROM employee WHERE salary > 50000
+    }
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Why can't we just check the result/output to know if the logic is correct?</td><td>Getting a correct output isn't the same as writing a correct/optimal approach — instructor emphasized understanding the approach (why StringBuilder over String) matters more than just achieving matching output.</td></tr>
+<tr><td>Should business logic like query-building go inside the constructor?</td><td>No — constructors should only initialize object state/fields; business logic belongs in dedicated methods unless a specific requirement forces otherwise.</td></tr>
+<tr><td>What is the advantage of modularity?</td><td>Problems/changes stay contained to their relevant module, without unintended impact on unrelated systems (e.g. a payment bug fix doesn't risk breaking cart or search functionality).</td></tr>
+<tr><td>What is the advantage of code reusability?</td><td>Saves development time and avoids re-testing already-proven functionality — reusing a working component avoids introducing new bugs that would need fixing and delay releases.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Prefer StringBuilder/StringBuffer over String whenever content needs to change dynamically or repeatedly.</li>
+<li>Keep constructors focused purely on field initialization — avoid embedding business logic there.</li>
+<li>Design code with maintainability, reusability, and modularity in mind from the start, not as an afterthought.</li>
+<li>No software is ever completely bug-free — design so that fixes can be made with minimal, contained changes rather than large rewrites.</li>
+<li>Real production systems can have hundreds of thousands of classes — modular organization is essential at that scale.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Build the dynamic email/notification template exercise using StringBuilder, supporting multiple different template scenarios (order placed, order cancelled, etc.).</li>
+<li>Build the dynamic SQL query constructor exercise, using multiple well-named classes rather than mixing everything into one flow.</li>
+<li>Debug through your query constructor using breakpoints to trace the conditional logic flow (as emphasized in class — don't just check final output).</li>
+<li>Reflect on a past exercise and identify where the code could be made more maintainable, reusable, or modular.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> String concatenation optimization and intern()</li>
+<li><b>Upcoming Topics:</b> SOLID design principles (mentioned as upcoming); continued OOP-based application design</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive live classroom code-review dialogue and the house/room analogy discussion were summarized into the relevant concept cards rather than transcribed as dialogue.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

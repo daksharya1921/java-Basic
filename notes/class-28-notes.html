@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 28</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 28 — Upcasting, Downcasting & Method Overriding</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Upcasting — parent class reference pointing to a child object (automatic)</li>
+<li>Downcasting — child class reference pointing to a parent-typed object (explicit, required)</li>
+<li>Why upcasting/downcasting matters — generic "factory" style methods returning Object</li>
+<li>ClassCastException — when downcasting fails at runtime</li>
+<li>Method Overriding — changing a parent class method's behavior in the child class</li>
+<li>Rules for overriding: exact same method signature required</li>
+<li>@Override annotation — purpose and optional nature</li>
+<li>Java method resolution order: child class → superclass → Object class</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Upcasting — Parent Reference to Child Object (Automatic)</b>
+<pre><code class="language-java">Employee e = new Manager(); // Manager IS-A Employee</code></pre>
+<p>A parent class reference can point to a child class object. This is called <b>upcasting</b>, and it happens <b>automatically</b> in Java — no explicit cast syntax is needed. This only works when a genuine parent-child (inheritance) relationship exists between the two classes.</p>
+</div>
+
+<div class="card">
+<b>Downcasting — Child Reference to Parent-Typed Object (Explicit)</b>
+<pre><code class="language-java">Employee e = new Manager();
+Manager m = (Manager) e; // explicit downcast required</code></pre>
+<p>The reverse — assigning a reference that's currently typed as the parent class to a more specific child class variable — is called <b>downcasting</b>, and it does <b>not</b> happen automatically. You must explicitly write the target type in parentheses to tell the compiler you intend to do this.</p>
+</div>
+
+<div class="card">
+<b>Why Downcasting is Needed — Generic "Factory" Methods</b>
+<p>A common real-world pattern: a method designed to return <b>many different types of objects</b> (e.g. based on a name/key supplied by the caller) can't declare a specific return type for each possible class — instead, it declares the return type as <code>Object</code> (the common ancestor of everything). The caller then needs to <b>downcast</b> the returned Object back to the specific type they expect to actually use its specific methods/fields.</p>
+</div>
+
+<div class="card">
+<b>ClassCastException</b>
+<p>Downcasting only <b>resolves the compile-time type check</b> — it does not guarantee the cast is valid at runtime. If you downcast an object to a type that <b>doesn't match its actual underlying type</b> (no real inheritance relationship to that actual object), Java throws a <code>ClassCastException</code> at <b>runtime</b>. The cast must match the object's true identity, not just look valid syntactically.</p>
+</div>
+
+<div class="card">
+<b>Method Overriding — Changing Parent Behavior in the Child</b>
+<p>If a child class inherits a method from its parent but wants <b>different behavior</b>, it can redefine that method inside itself with the <b>exact same signature</b> (name, parameters). This is called <b>method overriding</b> — the child's version replaces the parent's version when called on a child object.</p>
+</div>
+
+<div class="card">
+<b>Rules for a Valid Override</b>
+<p>The method in the child class must have the <b>exact same name</b> as the parent's method — Java is case-sensitive, so even a single differing letter's case makes it a completely different (unrelated) method, not an override.</p>
+</div>
+
+<div class="card">
+<b>@Override Annotation — Optional Safety Check</b>
+<p><code>@Override</code> (introduced in Java 5) is an optional annotation you can place above a method to tell the compiler "I intend this to override a parent method." If there's a mistake (e.g. a typo in the method name, meaning it doesn't actually match any parent method), the compiler will flag an error — catching accidental non-overrides that would otherwise silently just become a new, unrelated method.</p>
+</div>
+
+<div class="card">
+<b>Method Resolution Order</b>
+<p>When a method is called on an object, Java first checks if it's defined <b>in that object's own class</b>. If not found there, it checks the <b>superclass</b>, and if still not found, continues up to the <b>Object class</b> at the top. This is how overriding takes priority — the child's own version is found first.</p>
+</div>
+
+<div class="card">
+<b>"Functionality" = What's Inside the Curly Braces</b>
+<p>When discussing overriding "changing the functionality" of a method, this simply refers to changing the <b>code/logic written inside the method's curly braces</b> — the actual implementation, not the method's name or signature.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Upcasting and downcasting basics:</b></p>
+<pre><code class="language-java">class Employee { }
+class Manager extends Employee { }
+</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        Employee e = new Manager(); // upcasting — automatic
+
+        Manager m = (Manager) e;    // downcasting — explicit cast required
+    }
+}</code></pre>
+
+<p><b>Method overriding — child changes parent's behavior:</b></p>
+<pre><code class="language-java">class Product {
+    public void displayProductDetail() {
+        System.out.println("Generic product details");
+    }
+}</code></pre>
+<pre><code class="language-java">class ElectronicProduct extends Product {
+
+    @Override
+    public void displayProductDetail() { // exact same signature — this is overriding
+        System.out.println("Electronic product details");
+    }
+
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        ElectronicProduct ep = new ElectronicProduct();
+        ep.displayProductDetail(); // "Electronic product details" — overridden version runs
+    }
+}</code></pre>
+
+<p><b>Object factory pattern — returning Object, requiring downcast:</b></p>
+<pre><code class="language-java">class Product {
+    public void displayProductDetail() {
+        System.out.println("Product details");
+    }
+}
+
+class ElectronicProduct extends Product {
+    @Override
+    public void displayProductDetail() {
+        System.out.println("Electronic product details");
+    }
+}</code></pre>
+<pre><code class="language-java">class ObjectFactory {
+
+    public static Object getObject(String name) {
+        Object obj = null;
+
+        if (name.equalsIgnoreCase("product")) {
+            obj = new Product();
+        } else if (name.equalsIgnoreCase("electronic")) {
+            obj = new ElectronicProduct();
+        }
+
+        return obj; // returns Object — the common supertype of everything
+    }
+
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        Object obj = ObjectFactory.getObject("product");
+
+        // obj.displayProductDetail(); // ERROR — Object class has no such method
+
+        Product p = (Product) obj; // downcast required to use Product-specific methods
+        p.displayProductDetail();  // works fine now
+    }
+}</code></pre>
+
+<p><b>ClassCastException — downcasting to an unrelated/incorrect type:</b></p>
+<pre><code class="language-java">class Vehicle { }
+class Car extends Vehicle { }
+class Bike extends Vehicle { }
+</code></pre>
+<pre><code class="language-java">Vehicle v = new Car();
+Bike b = (Bike) v; // compiles fine, but throws ClassCastException at RUNTIME
+                    // because the actual object is a Car, not a Bike — no valid relationship
+</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Does downcasting guarantee success?</td><td>No — downcasting only satisfies the compiler; if the actual runtime object doesn't match the target type's inheritance chain, it throws a ClassCastException when executed.</td></tr>
+<tr><td>Why is @Override useful if it's optional?</td><td>It acts as a safety net — the compiler checks that a matching parent method actually exists, catching accidental typos or signature mismatches that would otherwise silently create an unrelated new method instead of a true override.</td></tr>
+<tr><td>If a child needs both the parent's existing functionality AND new specific functionality, should it override the same method for both?</td><td>No — write a separate new method for the child-specific functionality; don't try to cram both parent and child logic into a single overridden method meant for one purpose.</td></tr>
+<tr><td>Why does a factory-style method return Object instead of a specific type?</td><td>Because it needs to support returning many different object types based on runtime input — Object is the common ancestor that can represent all of them, with downcasting used by the caller afterward.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Upcasting (parent reference → child object) is automatic; downcasting (child reference → parent-typed object) requires an explicit cast.</li>
+<li>Downcasting to an incompatible type compiles but throws ClassCastException at runtime — always ensure a valid inheritance relationship exists.</li>
+<li>Overriding requires an exact match in method name (Java is case-sensitive) and signature — even one differing letter case creates an unrelated method instead.</li>
+<li>Use @Override to catch accidental non-matching "overrides" at compile time.</li>
+<li>Java looks for a method first in the object's own class, then the superclass, then Object — this is how overridden methods take precedence.</li>
+<li>Don't blend unrelated logic into one overridden method — separate distinct responsibilities into separate methods.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Create a parent and child class, practice both upcasting (automatic) and downcasting (explicit) between them.</li>
+<li>Build an ObjectFactory-style method that returns Object based on a supplied name, and practice downcasting the result to use type-specific functionality.</li>
+<li>Deliberately downcast to an unrelated/incorrect type and observe the ClassCastException at runtime.</li>
+<li>Practice method overriding: override a parent method in a child class, use @Override, and verify the child's version runs when called.</li>
+<li>Try a common Java-case-sensitivity mistake (e.g. capitalizing one letter differently) and confirm it does NOT override — instead becomes a separate, unrelated method.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Types of inheritance (single, multi-level, hierarchical) and the Diamond Problem</li>
+<li><b>Upcoming Topics:</b> Polymorphism — builds directly on upcasting/downcasting and method overriding covered here</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive live classroom debugging/tracing narration (including unrelated background chatter captured in the transcript) was excluded, and code examples were reconstructed cleanly from the concepts described.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

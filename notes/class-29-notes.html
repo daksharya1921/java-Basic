@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 29</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+.rulebox{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+.rule{background:#1e1e2f;color:#d4d4f7;padding:10px 16px;border-radius:8px;font-size:14px;flex:1;min-width:200px;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 29 — Method Overriding Rules & Covariant Return Types</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Recap: upcasting/downcasting, method overriding basics</li>
+<li>Private and final methods cannot be overridden</li>
+<li>Full rules for valid method overriding</li>
+<li>Covariant return types (introduced in Java 5) — detailed explanation</li>
+<li>Overriding requires a parent-child (inheritance) relationship</li>
+<li>Only one public class allowed per Java file</li>
+<li>Static method "hiding" (brief mention, not full overriding)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Private Methods Cannot Be Overridden</b>
+<p>Overriding requires a method to be <b>visible outside its own class</b> (since overriding happens <i>between</i> parent and child classes). Since private methods are only visible <b>within their own declaring class</b>, they cannot participate in overriding at all — a child class simply can't "see" them to override.</p>
+</div>
+
+<div class="card">
+<b>final Methods Cannot Be Overridden</b>
+<p>Marking a method <code>final</code> in the parent class prevents any child class from overriding it — while the method remains fully <b>usable</b> (callable) in child classes exactly as inherited, its <b>implementation cannot be changed</b>. This gives fine-grained control: you can allow some methods in a class to be overridden while locking others.</p>
+</div>
+
+<div class="card">
+<b>final vs private — Key Difference</b>
+<p>Both restrict overriding, but differently: a <b>private</b> method isn't even visible/usable outside its class. A <b>final</b> method IS visible and usable (inherited and callable) in child classes — it just can't be given new behavior via overriding.</p>
+</div>
+
+<div class="card">
+<b>Rules for Valid Method Overriding</b>
+<div class="rulebox">
+<div class="rule">1️⃣ Method name — must match exactly (Java is case-sensitive)</div>
+<div class="rule">2️⃣ Parameters — same order, same types, same number</div>
+<div class="rule">3️⃣ Return type — same, or covariant (see below)</div>
+<div class="rule">4️⃣ Access modifier — same or wider (never narrower)</div>
+<div class="rule">5️⃣ Exceptions — specific rules (covered later, once exception handling is taught)</div>
+</div>
+</div>
+
+<div class="card">
+<b>Rule 1: Method Name Must Match Exactly</b>
+<p>Even a single differing letter case (e.g. <code>calculatePrice</code> vs <code>CalculatePrice</code>) makes it a completely <b>different, unrelated method</b> in Java's eyes — not an override. Java is strictly case-sensitive.</p>
+</div>
+
+<div class="card">
+<b>Rule 2: Parameters Must Match</b>
+<p>The overriding method must have the <b>same number</b>, <b>same types</b>, and <b>same order</b> of parameters as the parent method. Parameter <b>variable names</b> don't matter (Java doesn't check those) — only their types, count, and order.</p>
+</div>
+
+<div class="card">
+<b>Rule 3: Access Modifier — Same or Wider Only</b>
+<p>The overriding method's access modifier must be <b>at least as visible</b> as the parent's — you can keep it the same or make it <b>wider</b>, but you can <b>never narrow it</b>. Example: default → default (allowed), default → protected/public (allowed, widening), but protected → default (NOT allowed, narrowing).</p>
+<p><b>Why this rule exists:</b> If narrowing were allowed, a child class could override a public method and make it private — effectively blocking any further child classes from being able to override or even use it, breaking the inheritance chain's consistency.</p>
+</div>
+
+<div class="card">
+<b>Why Override Instead of Writing a New Method?</b>
+<p>Even if the internal logic is completely different, overriding maintains a <b>consistent contract/interface</b> across all related classes. Example: if every subclass of Customer needs to calculate a price, they should all expose the <b>same method name</b> (<code>calculatePrice()</code>) — even with different internal logic — rather than each having a differently-named method, which would break consistency and make the codebase harder to use predictably (similar to why every class inherits a consistently-named <code>equals()</code> method from Object, even though each class implements its comparison logic differently).</p>
+</div>
+
+<div class="card">
+<b>Rule 4 (Covariant Return Types) — What "Covariant" Means</b>
+<p>Introduced in <b>Java 5</b>. Normally, the overriding method's return type must be exactly the <b>same</b> as the parent's. <b>Covariant return type</b> is a special exception: the overriding method in the child class can return either the <b>same type</b> OR a <b>child (subtype) of the parent method's declared return type</b>.</p>
+</div>
+
+<div class="card">
+<b>Covariant Return Type — Worked Example</b>
+<p>If a parent class method's return type is <code>Post</code>, an overriding method in a child class can return either <code>Post</code> itself, or any class that <b>IS-A Post</b> (e.g. <code>SpeedPost</code>, if <code>SpeedPost extends Post</code>). This only works because a genuine parent-child relationship exists between the two return types — if that relationship doesn't exist, covariant returns don't apply, and the return type must be exactly the same.</p>
+</div>
+
+<div class="card">
+<b>One Public Class Per Java File</b>
+<p>A single <code>.java</code> file can contain multiple classes, but only <b>one</b> of them may be declared <code>public</code> — and if there is a public class, the <b>file name must exactly match that class's name</b>. Multiple public classes in one file cause a compilation error.</p>
+</div>
+
+<div class="card">
+<b>Static Methods — "Hiding," Not True Overriding (Brief Mention)</b>
+<p>If a subclass declares a static method with the same signature as a static method in the parent, this is technically called <b>method hiding</b>, not overriding — because static members belong to the <b>class</b>, and true overriding is resolved at <b>runtime based on the actual object</b>, which doesn't apply the same way to static context. This was flagged as a topic to be covered in more depth later.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Private methods cannot be overridden:</b></p>
+<pre><code class="language-java">class Customer {
+    private void internalDetails() {
+        System.out.println("internal only");
+    }
+
+    public void calculatePrice() {
+        System.out.println("Customer price logic");
+    }
+}</code></pre>
+<pre><code class="language-java">class GoldCustomer extends Customer {
+    // internalDetails() is NOT visible here — cannot be overridden
+
+    @Override
+    public void calculatePrice() { // valid override — public, visible
+        System.out.println("Gold customer discounted price logic");
+    }
+}</code></pre>
+
+<p><b>final method — cannot be overridden, but still usable:</b></p>
+<pre><code class="language-java">class Customer {
+    public final void loyaltyPoints() {
+        System.out.println("Standard loyalty points logic");
+    }
+}</code></pre>
+<pre><code class="language-java">class GoldCustomer extends Customer {
+    // @Override
+    // public void loyaltyPoints() { }  // ERROR: cannot override final method
+}</code></pre>
+<pre><code class="language-java">GoldCustomer gc = new GoldCustomer();
+gc.loyaltyPoints(); // works fine — inherited as-is, just can't be overridden</code></pre>
+
+<p><b>Access modifier — allowed widening, disallowed narrowing:</b></p>
+<pre><code class="language-java">class Customer {
+    protected void printDetails() {
+        System.out.println("Customer details");
+    }
+}</code></pre>
+<pre><code class="language-java">class GoldCustomer extends Customer {
+
+    @Override
+    public void printDetails() { // ALLOWED — protected widened to public
+        System.out.println("Gold customer details");
+    }
+
+}</code></pre>
+<pre><code class="language-java">// NOT ALLOWED:
+// @Override
+// private void printDetails() { }  // ERROR: cannot reduce visibility from protected to private</code></pre>
+
+<p><b>Covariant return type — full worked example:</b></p>
+<pre><code class="language-java">class Post { }
+
+class SpeedPost extends Post { } // SpeedPost IS-A Post</code></pre>
+<pre><code class="language-java">class Delivery {
+    public Post doDelivery() {
+        return new Post();
+    }
+}</code></pre>
+<pre><code class="language-java">class OneDayDelivery extends Delivery {
+
+    @Override
+    public SpeedPost doDelivery() { // covariant — SpeedPost is a child of Post
+        return new SpeedPost();
+    }
+
+}</code></pre>
+
+<p><b>Without a valid parent-child relationship, covariant return doesn't apply:</b></p>
+<pre><code class="language-java">class Post { }
+class UnrelatedClass { } // no inheritance relationship with Post</code></pre>
+<pre><code class="language-java">class Delivery {
+    public Post doDelivery() {
+        return new Post();
+    }
+}</code></pre>
+<pre><code class="language-java">class OneDayDelivery extends Delivery {
+    // @Override
+    // public UnrelatedClass doDelivery() { }
+    // ERROR: UnrelatedClass is not a subtype of Post — covariant rule doesn't apply
+}</code></pre>
+
+<p><b>Object as return type — anything can be returned covariantly:</b></p>
+<pre><code class="language-java">class Delivery {
+    public Object doDelivery() {
+        return new Object();
+    }
+}</code></pre>
+<pre><code class="language-java">class OneDayDelivery extends Delivery {
+    @Override
+    public Post doDelivery() { // valid — Post is a child of Object (everything is)
+        return new Post();
+    }
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Why override a method instead of just writing a differently-named new method with the desired logic?</td><td>To maintain a consistent method contract/interface across related classes — the same purpose should be accessible via the same method name, regardless of differing internal implementations.</td></tr>
+<tr><td>Why can't a child class narrow the access modifier when overriding?</td><td>If allowed, a child could override a public method as private, effectively blocking further subclasses from accessing or re-overriding it, breaking the consistency the parent originally established.</td></tr>
+<tr><td>What exactly is covariant return type?</td><td>The overriding method can return the same type as the parent's declared return type, OR any valid subtype (child class) of it — this flexibility was introduced in Java 5.</td></tr>
+<tr><td>Does covariant return type work without any parent-child relationship between the two return types?</td><td>No — a genuine inheritance relationship must exist between the original return type and the new return type for covariant returns to be valid.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Private methods can never be overridden — they're not visible to child classes at all.</li>
+<li>final methods prevent overriding but remain fully usable/inherited as-is.</li>
+<li>Method name, parameter types/order/count must match exactly for valid overriding.</li>
+<li>Access modifiers can only stay the same or widen when overriding — never narrow.</li>
+<li>Covariant return types (Java 5+) allow returning a subtype of the parent method's declared return type — but only when a real inheritance relationship exists between the types.</li>
+<li>Only one public class is allowed per .java file, and it must match the file name exactly.</li>
+<li>Return type is not limited to primitives/void — it can be any valid object type, including custom classes.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Create a parent class with a final method and confirm a child class cannot override it, but can still call it as inherited.</li>
+<li>Practice overriding with widened access modifiers (e.g. protected → public) and confirm narrowing is rejected by the compiler.</li>
+<li>Build the covariant return type example: a Delivery/OneDayDelivery pair with a Post/SpeedPost return type relationship, and confirm it compiles.</li>
+<li>Try covariant return with an unrelated (non-inheriting) class as the new return type and observe the compiler error.</li>
+<li>Practice explaining covariant return types out loud in one clear sentence (this was specifically emphasized as an interview communication skill in class).</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Upcasting, downcasting, and introduction to method overriding</li>
+<li><b>Upcoming Topics:</b> Method overloading and Polymorphism; exception-related overriding rules (once exception handling is covered)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, the rules visual, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive live classroom Q&A (multiple students individually re-explaining covariant return types) was summarized into the relevant concept cards rather than transcribed as repeated dialogue.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>

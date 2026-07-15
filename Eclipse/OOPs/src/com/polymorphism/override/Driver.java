@@ -27,6 +27,12 @@ public class Driver {
 		
 		System.out.println("Salary Developer: "+d.calcuateSalary(5754));
 		d.displayDetails();
+		
+		
+		
+		
+		Employee e = new HR();
+//		HR hr = (HR)new e;
 	}
 	
 }

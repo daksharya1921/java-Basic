@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 25</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+.pillarbox{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+.pillar{background:#1e1e2f;color:#d4d4f7;padding:10px 16px;border-radius:8px;font-family:monospace;font-size:14px;flex:1;min-width:150px;text-align:center;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 25 — OOP Introduction & Encapsulation</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Introduction to OOPs (Object-Oriented Programming) — the 4 pillars</li>
+<li>Brief definitions: Encapsulation, Abstraction, Inheritance, Polymorphism</li>
+<li>Encapsulation — hiding data, controlling visibility</li>
+<li>Why direct access to class fields is a design problem</li>
+<li>Private fields + public getters/setters — the standard pattern</li>
+<li>Controlled modification via setter logic (validation)</li>
+<li>Practical examples: bank Account class, ATM class, PhonePay-style wallet</li>
+<li>Why OOPs matters for Low-Level Design (LLD) interviews</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>The 4 Pillars of OOPs</b>
+<div class="pillarbox">
+<div class="pillar">🔒 Encapsulation<br><small>hiding data</small></div>
+<div class="pillar">🎭 Abstraction<br><small>hiding implementation</small></div>
+<div class="pillar">🧬 Inheritance<br><small>reusing parent's properties</small></div>
+<div class="pillar">🔀 Polymorphism<br><small>same method, different behavior</small></div>
+</div>
+<ul>
+<li><b>Encapsulation</b> — hiding data (fields) from other classes</li>
+<li><b>Abstraction</b> — hiding implementation/critical logic from other classes</li>
+<li><b>Inheritance</b> — reusing a parent class's properties, like inheriting a father's property</li>
+<li><b>Polymorphism</b> — the same method behaves differently depending on the situation/context (e.g. the same person is a "student" in class, a "tenant" at their PG, a "passenger" at the airport)</li>
+</ul>
+</div>
+
+<div class="card">
+<b>What Encapsulation Means</b>
+<p>A class should <b>not allow other classes to modify its data (fields) directly</b>. Access should instead go through a <b>controlled interface</b> — similar to how a home has boundaries/privacy, and neighbors can't just walk in and interfere, but can interact through agreed, controlled means when needed.</p>
+</div>
+
+<div class="card">
+<b>Why Controlling Visibility Matters</b>
+<p>If a class exposes its fields as <b>public</b>, any other class can set them to <b>any value</b> — including invalid or nonsensical ones (e.g. a negative account balance). This is a design flaw: the class has <b>no control</b> over what values its own data takes.</p>
+</div>
+
+<div class="card">
+<b>The Standard Pattern: Private Fields + Public Getters/Setters</b>
+<ul>
+<li>Declare fields as <code>private</code> — this prevents other classes from directly reading or modifying them.</li>
+<li>Provide <b>public getter</b> methods to allow controlled <b>reading</b> of the data.</li>
+<li>Provide <b>public setter</b> methods to allow controlled <b>modification</b> of the data — with validation logic inside.</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Controlled Modification via Setter Logic</b>
+<p>Inside a setter (or any method that modifies state, like <code>deposit()</code> or <code>withdraw()</code>), you can add validation — e.g. rejecting negative deposit amounts, or preventing a withdrawal that exceeds the current balance. This is exactly what "modification in a controlled way" means — the class itself decides what changes are valid, rather than blindly accepting whatever the caller supplies.</p>
+</div>
+
+<div class="card">
+<b>"Not Well Encapsulated" — A Common Interview/Review Question</b>
+<p>A very common interview/code-review scenario: you're shown working code (with public fields being modified directly from another class) and asked "what's the problem with this code?" The correct answer isn't about syntax — it's identifying that the class is <b>not well encapsulated</b>, since other classes can directly modify its data without any validation or control.</p>
+</div>
+
+<div class="card">
+<b>Getters/Setters Don't Have to Be Named get/set</b>
+<p>While <code>getX()</code>/<code>setX()</code> is the common convention, the underlying idea is just "a controlled method to read/modify data." Domain-specific method names (like <code>deposit()</code> and <code>withdraw()</code> in a banking context) achieve the same encapsulation principle — they're effectively setters with built-in business validation.</p>
+</div>
+
+<div class="card">
+<b>Why OOPs Matters for LLD Interviews</b>
+<p>Low-Level Design (LLD) interview rounds are largely evaluating how well a candidate applies OOPs concepts — not just whether the code "works" or produces correct output. Many candidates get rejected in LLD rounds despite working code, because they focus only on logic/output and not on whether their design follows encapsulation, abstraction, inheritance, and polymorphism properly.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>NOT well encapsulated — public field, direct access:</b></p>
+<pre><code class="language-java">class Account {
+    public int balance; // public — no control at all
+}</code></pre>
+<pre><code class="language-java">class User {
+    public static void main(String[] args) {
+        Account account = new Account();
+        account.balance = -2000000; // any class can set anything, even invalid values
+        System.out.println(account.balance);
+    }
+}</code></pre>
+
+<p><b>Well encapsulated — private field with controlled getter/setter:</b></p>
+<pre><code class="language-java">class Account {
+    private int balance;
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        if (balance >= 0) { // controlled validation
+            this.balance = balance;
+        } else {
+            System.out.println("Invalid amount");
+        }
+    }
+}</code></pre>
+<pre><code class="language-java">class User {
+    public static void main(String[] args) {
+        Account account = new Account();
+        account.setBalance(-2000); // rejected — invalid amount, balance stays unchanged
+        System.out.println(account.getBalance()); // 0 (default, unchanged)
+    }
+}</code></pre>
+
+<p><b>Practical example — bank Account with deposit/withdraw (domain-specific setters):</b></p>
+<pre><code class="language-java">class Account {
+
+    private int balance;
+    private String name;
+
+    public Account(int balance, String name) {
+        this.balance = balance;
+        this.name = name;
+    }
+
+    public void deposit(int amount) {
+        if (amount > 0) {
+            balance = balance + amount;
+        }
+    }
+
+    public void withdraw(int amount) {
+        if (amount <= balance) {
+            balance = balance - amount;
+        } else {
+            System.out.println("Insufficient balance");
+        }
+    }
+
+    public int checkBalance() {
+        return balance;
+    }
+
+}</code></pre>
+<pre><code class="language-java">class ATM {
+    public static void main(String[] args) {
+        Account account = new Account(10000, "Rahul");
+
+        System.out.println(account.checkBalance()); // 10000
+
+        account.withdraw(22000); // rejected: Insufficient balance
+        account.withdraw(2000);  // allowed
+        System.out.println(account.checkBalance()); // 8000
+
+        account.deposit(2000);
+        System.out.println(account.checkBalance()); // 10000
+
+        // account.balance = 999999; // NOT possible — private, compile error
+    }
+}</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>If private members are "not visible outside the class," why can I still see them in the code editor?</td><td>"Visibility" here means whether other classes can access/call them programmatically — not literal visual visibility in the IDE.</td></tr>
+<tr><td>Does encapsulation mean a class should not interact with any other class at all?</td><td>No — it means interaction should happen in a controlled way (via public methods), not that the class should be fully isolated with zero interaction.</td></tr>
+<tr><td>Is it compulsory to always name methods get/set?</td><td>No — the naming convention is common, but domain-specific method names (like deposit/withdraw) that provide controlled access serve the same encapsulation purpose.</td></tr>
+<tr><td>Why do LLD interview candidates get rejected even with working code?</td><td>Because LLD rounds evaluate OOPs design quality (encapsulation, etc.), not just whether the code produces correct output.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Public fields with no validation is a classic encapsulation violation — always flag this in code review scenarios.</li>
+<li>Declare fields private by default; expose controlled access only through public methods.</li>
+<li>Add validation logic inside setters/modifier methods rather than allowing blind updates.</li>
+<li>"Not well encapsulated" is a specific, correct answer to give when asked what's wrong with code that allows direct, uncontrolled field modification.</li>
+<li>Encapsulation doesn't mean isolating a class from all others — it means controlling how interaction happens.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write a class with public fields, directly modify them from another class, and observe the lack of control — note why this is a design flaw.</li>
+<li>Refactor that same class to be properly encapsulated: private fields, public getter/setter methods with validation.</li>
+<li>Build a "PhonePay wallet"-style application demonstrating encapsulation — private balance, controlled deposit/withdraw/transfer methods, and a getBalance() method.</li>
+<li>Review any of your earlier practice programs and check whether their classes are well encapsulated; fix any that aren't.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> StringBuilder practical use cases and software design principles (maintainability, reusability, modularity)</li>
+<li><b>Upcoming Topics:</b> Abstraction, Inheritance, and Polymorphism — the remaining three OOPs pillars</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, the pillar visual, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive individual student code-review chatter during the practice session was summarized into general common-mistake points, and closing remarks about office hours/availability were excluded as non-technical content.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>
