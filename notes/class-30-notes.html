@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 30</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 30 — Method Hiding, Overloading & Runtime Polymorphism</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Recap: method overriding rules summary</li>
+<li>Why private and static methods cannot be truly overridden</li>
+<li>Static method hiding — what it means and how it differs from overriding</li>
+<li>Method Overloading — definition and the single rule that governs it</li>
+<li>Why overloading exists — flexibility for the caller</li>
+<li>Polymorphism — the real-world analogy and formal definition</li>
+<li>Runtime polymorphism (dynamic method dispatch) via method overriding</li>
+<li>Compile-time check vs runtime method resolution</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Recap: Overriding Rules Summary</b>
+<ul>
+<li>Inheritance is compulsory (overriding happens between parent and child, never within the same class)</li>
+<li>Method name must be exactly the same</li>
+<li>Parameters: same order, type, and number</li>
+<li>Return type: same, or covariant</li>
+<li>Access modifier: same or wider (never narrower)</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Private Methods Cannot Be Overridden (Recap)</b>
+<p>Overriding requires the method to be <b>visible</b> in the child class — private methods aren't, since private scope is limited strictly to the declaring class.</p>
+</div>
+
+<div class="card">
+<b>Static Methods Cannot Be Truly Overridden — Method Hiding</b>
+<p>Static methods belong to the <b>class</b>, and which static method gets called is <b>resolved at compile time</b> — before the program even runs. True overriding, by contrast, is resolved at <b>runtime</b> based on the actual object. Because of this timing mismatch, if a child class declares a static method with the same signature as a parent's static method, this is <b>not overriding</b> — it's called <b>method hiding</b>. The parent's static method becomes hidden (inaccessible via the child reference) rather than replaced/overridden.</p>
+</div>
+
+<div class="card">
+<b>Method Overloading — Definition</b>
+<p>Overloading means having <b>multiple versions of the same method name within the same class</b> — like different "flavors" of the same method, each uniquely identifiable by its parameter signature.</p>
+</div>
+
+<div class="card">
+<b>The One Rule for Valid Overloading</b>
+<p>Within the same class, the method name must be the same, but at least one of the following must <b>differ</b>:</p>
+<ul>
+<li>Number of arguments, OR</li>
+<li>Type of arguments, OR</li>
+<li>Order of arguments</li>
+</ul>
+<p><b>Return type, access modifier, and static keyword do NOT matter</b> for overloading — they can be anything and it's still a valid overload, as long as the parameter signature differs in at least one of the three ways above.</p>
+</div>
+
+<div class="card">
+<b>Overloading vs Overriding — Key Difference</b>
+<table>
+<tr><th>Overloading</th><th>Overriding</th></tr>
+<tr><td>Happens WITHIN the same class</td><td>Happens BETWEEN parent and child classes</td></tr>
+<tr><td>No inheritance required</td><td>Inheritance is compulsory</td></tr>
+<tr><td>Parameters must differ</td><td>Parameters must be identical</td></tr>
+</table>
+</div>
+
+<div class="card">
+<b>Why Overloading Exists — Flexibility for the Caller</b>
+<p>Overloading lets callers use whichever version of a method fits the data they actually have available. Real-world example: a registration system might allow registering via mobile+OTP, OR via Aadhaar, OR via DL/Voter ID, OR via a bank ATM PIN — since not everyone has every type of ID. Each option is an overloaded version of a "doRegistration" method, and the appropriate one gets called based on what arguments are supplied.</p>
+</div>
+
+<div class="card">
+<b>Polymorphism — The Real-World Analogy</b>
+<p>Polymorphism means the <b>same entity behaves differently depending on the situation/context</b>. Example: the same person is a "student" in class, a "tenant" at their PG, and a "passenger" at the airport — same person, different behavior based on context. In Java, this translates to: <b>the same method call behaves differently depending on the actual object type</b>.</p>
+</div>
+
+<div class="card">
+<b>Runtime Polymorphism — Requires Overriding + Inheritance</b>
+<p>Runtime polymorphism (also called <b>dynamic method dispatch</b> or <b>late binding</b>) is achieved through <b>method overriding</b> combined with <b>upcasting</b> (a parent reference pointing to different child objects). Which overridden version of a method actually runs is decided <b>at runtime</b>, based on the <b>actual object type</b> — not the reference variable's declared type.</p>
+</div>
+
+<div class="card">
+<b>Two-Phase Method Resolution: Compile Time vs Runtime</b>
+<ul>
+<li><b>Compile time:</b> The compiler only checks whether the method exists somewhere accessible on the <b>reference type</b> (the declared type of the variable) — it doesn't know or care what the actual object will be at runtime.</li>
+<li><b>Runtime:</b> JVM looks at the <b>actual object</b> that was created and calls <b>that object's version</b> of the method (its own override, if one exists — otherwise falls back up the inheritance chain to the parent's version).</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Method Lookup Falls Back Up the Inheritance Chain</b>
+<p>If the actual object's class doesn't have its own override of the called method, Java looks in its <b>parent class</b>, then that parent's parent, and so on — all the way up to <b>Object class</b> if needed — calling the first matching version it finds.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Static method hiding — NOT true overriding:</b></p>
+<pre><code class="language-java">class Delivery {
+    static void method1() {
+        System.out.println("Delivery static method");
+    }
+}</code></pre>
+<pre><code class="language-java">class ExpressDelivery extends Delivery {
+    static void method1() { // this HIDES the parent's static method, doesn't override it
+        System.out.println("ExpressDelivery static method");
+    }
+}</code></pre>
+<pre><code class="language-java">Delivery.method1();        // "Delivery static method"
+ExpressDelivery.method1(); // "ExpressDelivery static method"
+// Each is resolved at compile time based on the class name used — no runtime decision involved</code></pre>
+
+<p><b>Method overloading — multiple versions of doRegistration():</b></p>
+<pre><code class="language-java">class UserRegistration {
+
+    public void doRegistration(String mobile, int otp) {
+        System.out.println("Registered via mobile + OTP");
+    }
+
+    public void doRegistration(String aadhaar) {
+        System.out.println("Registered via Aadhaar");
+    }
+
+    public void doRegistration(int atmPin, String cardNumber) {
+        System.out.println("Registered via ATM PIN + card");
+    }
+
+    public void doRegistration(String dln, String voterId) {
+        System.out.println("Registered via DL + Voter ID");
+    }
+
+}</code></pre>
+<pre><code class="language-java">class Driver1 {
+    public static void main(String[] args) {
+        UserRegistration ur = new UserRegistration();
+        ur.doRegistration("9876543210", 1234);         // calls (String, int) version
+        ur.doRegistration(1234, "ATM123456");            // calls (int, String) version — different order
+    }
+}</code></pre>
+
+<p><b>Runtime polymorphism — full example:</b></p>
+<pre><code class="language-java">class Delivery {
+    public String estimateTime(String source, String destination) {
+        return "Delivery: standard estimate";
+    }
+}</code></pre>
+<pre><code class="language-java">class OneDayDelivery extends Delivery {
+    @Override
+    public String estimateTime(String source, String destination) {
+        return "OneDayDelivery: 1 day estimate";
+    }
+}</code></pre>
+<pre><code class="language-java">class ExpressDelivery extends Delivery {
+    @Override
+    public String estimateTime(String source, String destination) {
+        return "ExpressDelivery: 2 hour estimate";
+    }
+}</code></pre>
+<pre><code class="language-java">class Driver {
+    public static void main(String[] args) {
+        Delivery del = new OneDayDelivery(); // reference type: Delivery, actual object: OneDayDelivery
+        System.out.println(del.estimateTime("Bangalore", "Delhi"));
+        // Compile time: checks estimateTime exists on Delivery type — OK
+        // Runtime: actual object is OneDayDelivery -> calls OneDayDelivery's version
+        // Output: "OneDayDelivery: 1 day estimate"
+
+        del = new ExpressDelivery(); // same reference, different actual object now
+        System.out.println(del.estimateTime("Bangalore", "Delhi"));
+        // Output: "ExpressDelivery: 2 hour estimate" — decision changes based on actual object
+    }
+}</code></pre>
+
+<p><b>Method lookup falls back to parent if not overridden:</b></p>
+<pre><code class="language-java">Delivery del = new OneDayDelivery();
+del.hashCode(); // OneDayDelivery doesn't define hashCode(), Delivery doesn't either
+                 // -> Java goes up to Object class and calls Object's hashCode()</code></pre>
+
+<p><b>Compilation fails if the method doesn't exist on the reference type, even if the actual object has it:</b></p>
+<pre><code class="language-java">class Delivery { } // no estimateTime() method here at all
+
+class OneDayDelivery extends Delivery {
+    public String estimateTime(String s, String d) {
+        return "1 day";
+    }
+}</code></pre>
+<pre><code class="language-java">Delivery del = new OneDayDelivery();
+del.estimateTime("A", "B"); // COMPILE ERROR — estimateTime() not found on Delivery (reference type)
+                            // even though the actual object (OneDayDelivery) has it
+</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Can a static method be overridden?</td><td>No — it's called method hiding, not overriding, since static methods are resolved at compile time, not runtime.</td></tr>
+<tr><td>Does return type matter for overloading?</td><td>No — return type, access modifier, and static/non-static status can all vary freely; only the parameter signature (order/type/number) determines whether it's a valid overload.</td></tr>
+<tr><td>Why is runtime polymorphism called "runtime"?</td><td>Because the decision of which overridden method to actually call is made at runtime, based on the actual object type — not decided during compilation.</td></tr>
+<tr><td>What happens if the reference type doesn't have the method being called, even if the actual object does?</td><td>Compilation fails — the compiler only checks the reference (declared) type, not the actual runtime object.</td></tr>
+<tr><td>What happens if neither the actual object's class nor its immediate parent has the called method?</td><td>Java continues searching up the inheritance chain until it finds a match, ultimately reaching Object class if needed.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Static methods are hidden, not overridden, in child classes — resolved at compile time based on the class name used to call them.</li>
+<li>Overloading requires differing parameters (order/type/number); return type and modifiers don't matter.</li>
+<li>Overloading = within a class; Overriding = between parent and child classes — don't confuse the two.</li>
+<li>Runtime polymorphism requires both inheritance and method overriding to work.</li>
+<li>Compile-time checks are based on the reference (declared) type; runtime behavior is based on the actual object type.</li>
+<li>If a method isn't overridden in the actual object's class, Java searches up the inheritance chain (parent, grandparent, ... Object) for the nearest matching version.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write a class with a static method and a child class that "hides" it — confirm which version runs when called via each class name directly.</li>
+<li>Build a UserRegistration class with 3–4 overloaded doRegistration() methods differing in parameter type/order/number.</li>
+<li>Build a Delivery/OneDayDelivery/ExpressDelivery hierarchy with an overridden estimateTime() method, and practice reassigning the same parent reference to different child objects to observe runtime polymorphism in action.</li>
+<li>Try removing the method from the parent class entirely and observe the resulting compile-time error, even though the child class still has its own version.</li>
+<li>Write and trace at least 20–30 small runtime polymorphism examples to build intuition, as emphasized in class.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Method overriding rules and covariant return types</li>
+<li><b>Upcoming Topics:</b> Continued polymorphism practice; Abstraction (the remaining OOPs pillar)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, the comparison table, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive live classroom Q&A and code-tracing dialogue were summarized into the relevant concept cards and code examples rather than transcribed as dialogue.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>
