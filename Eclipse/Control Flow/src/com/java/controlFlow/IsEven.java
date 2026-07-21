@@ -5,15 +5,15 @@ import	java.util.Scanner;
 public class IsEven {
 	
 	
-	private boolean isEven(int number)
-	{
-		
-		public static void main(String[] args) {
-
-	        int result = processOrder(5, 200);
-
-	        System.out.println("Final Result = " + result);
-	    }
+//	private boolean isEven(int number)
+//	{
+//		
+//		public static void main(String[] args) {
+//
+//	        int result = processOrder(5, 200);
+//
+//	        System.out.println("Final Result = " + result);
+//	    }
 
 	    static int processOrder(int quantity, int price) {
 
