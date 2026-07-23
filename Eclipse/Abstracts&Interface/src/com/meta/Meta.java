@@ -13,10 +13,17 @@ public interface Meta {
 	void deleteAccount();
 	
 	public default void doCall() {
+		doCall1();
 		System.out.println("Call()");
 	}
 
-	public default void reels() {
+	public static void reels() {
+	//	doCall1();
 		System.out.println("30 sec videos");
 	}
+	
+	private void doCall1() {
+		System.out.println("Call()");
+	}
+
 }
