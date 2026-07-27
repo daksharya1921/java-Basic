@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 38</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 38 — Functional Interfaces & Lambda Expressions</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Recap: marker interface</li>
+<li>What functional programming means, at a high level</li>
+<li>Why Java introduced functional interfaces (Java 8)</li>
+<li>Functional interface definition — exactly one abstract method</li>
+<li>Lambda expressions — implementing a functional interface's method without naming it</li>
+<li>@FunctionalInterface annotation</li>
+<li>Rules: default/static/private methods don't affect functional interface status</li>
+<li>Built-in functional interfaces: Predicate, Supplier, Consumer, Function</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>What is Functional Programming? (High Level)</b>
+<p>Functional programming focuses on <b>what</b> needs to be done, rather than <b>how</b> it's implemented step by step. Before Java 8, Java did not support this style — other languages already did, and market demand pushed Java to add support for it.</p>
+</div>
+
+<div class="card">
+<b>Functional Interface — Definition</b>
+<p>A functional interface is an interface with <b>exactly one abstract method</b> (also called a Single Abstract Method, or <b>SAM</b>). This single-method constraint is what makes lambda expressions possible — Java can unambiguously know which method a lambda expression is implementing.</p>
+</div>
+
+<div class="card">
+<b>Marker vs Functional Interface — Quick Contrast</b>
+<ul>
+<li><b>Marker interface</b> — zero methods (empty)</li>
+<li><b>Functional interface</b> — exactly one abstract method</li>
+</ul>
+</div>
+
+<div class="card">
+<b>Why Only One Abstract Method?</b>
+<p>If a functional interface had two or more abstract methods, Java wouldn't know which method a lambda expression is meant to implement when you don't specify a method name — this would create ambiguity. Restricting to a single abstract method removes that ambiguity entirely.</p>
+</div>
+
+<div class="card">
+<b>Lambda Expression — What It Achieves</b>
+<p>A lambda expression lets you implement a functional interface's single method <b>without</b> writing a full class, without extending/implementing anything explicitly by name, and <b>without naming the method</b> — you just supply the parameters and the logic directly, and Java infers everything else based on the interface's single abstract method signature.</p>
+</div>
+
+<div class="card">
+<b>Traditional Implementation vs Lambda — The Simplification</b>
+<p>Traditionally: declare interface → create a separate implementing class → override the method → create an object of that class → call the method. With lambda expressions, all of that collapses into essentially <b>one line</b>: assign a lambda expression directly to a variable of the functional interface's type.</p>
+</div>
+
+<div class="card">
+<b>@FunctionalInterface Annotation</b>
+<p>An <b>optional</b> annotation placed above an interface declaration. It doesn't add functionality — it acts as a <b>compile-time safety check</b>: if someone later accidentally adds a second abstract method to an interface marked <code>@FunctionalInterface</code>, the compiler throws an error, preventing accidental breakage of code relying on that interface's lambda-compatibility.</p>
+</div>
+
+<div class="card">
+<b>Default, Static, and Private Methods Don't Affect Functional Status</b>
+<p>A functional interface can have any number of <code>default</code>, <code>static</code>, and <code>private</code> methods alongside its single abstract method — none of these count toward the "single abstract method" rule. Only the count of <b>abstract</b> methods matters.</p>
+</div>
+
+<div class="card">
+<b>Interface Inheritance and Functional Status</b>
+<p>If one functional interface (one abstract method) extends another functional interface (also one abstract method) with a <b>different</b> method signature, the child interface effectively ends up with two abstract methods total — meaning the <b>child is no longer a valid functional interface</b>, even though each parent individually was.</p>
+</div>
+
+<div class="card">
+<b>Built-in Functional Interfaces (java.util.function, since Java 8)</b>
+<table>
+<tr><th>Interface</th><th>Method</th><th>Purpose</th></tr>
+<tr><td>Predicate&lt;T&gt;</td><td>test(T t)</td><td>Takes input, returns boolean (a condition check)</td></tr>
+<tr><td>Supplier&lt;T&gt;</td><td>get()</td><td>Takes no input, returns a value</td></tr>
+<tr><td>Consumer&lt;T&gt;</td><td>accept(T t)</td><td>Takes input, returns nothing (just "consumes" it)</td></tr>
+<tr><td>Function&lt;T,R&gt;</td><td>apply(T t)</td><td>Takes input, transforms it, returns a result</td></tr>
+</table>
+</div>
+
+<div class="card">
+<b>Predicate — Condition Checking</b>
+<p>Use when you want to check a condition and get a true/false result, without writing a full if-else block manually — e.g. "is this number less than 100?"</p>
+</div>
+
+<div class="card">
+<b>Supplier — No Input, Just Output</b>
+<p>Use when you don't need any input but want some generated output — classic example: generating an OTP or account number, where nothing is "supplied" to the logic, it just produces a value.</p>
+</div>
+
+<div class="card">
+<b>Consumer — Input, No Output</b>
+<p>Use when you want to "consume" an input and perform an action, without expecting any return value — e.g. sending an email (you pass the email address, it sends the email, nothing is returned).</p>
+</div>
+
+<div class="card">
+<b>Function — Input, Transform, Output</b>
+<p>Use when you want to take an input, apply some transformation/calculation, and return a result — e.g. applying a discount formula to an amount and getting back the discounted value.</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Traditional way vs lambda — custom functional interface:</b></p>
+<pre><code class="language-java">interface MyInterface {
+    int add(int a, int b); // implicitly public abstract
+}</code></pre>
+<pre><code class="language-java">// Traditional way
+class AddImpl implements MyInterface {
+    @Override
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+MyInterface obj = new AddImpl();
+System.out.println(obj.add(2, 3));</code></pre>
+<pre><code class="language-java">// Lambda way — no separate class, no method name
+MyInterface myInterface = (x, y) -> x + y;
+int sum = myInterface.add(2, 3); // 5
+</code></pre>
+
+<p><b>@FunctionalInterface — prevents accidental breakage:</b></p>
+<pre><code class="language-java">@FunctionalInterface
+interface MyInterface {
+    int add(int a, int b);
+    // int subtract(int a, int b); // uncommenting this causes a COMPILE ERROR
+    //  — "MyInterface is not a functional interface"
+}</code></pre>
+
+<p><b>Custom functional interface — discount application:</b></p>
+<pre><code class="language-java">@FunctionalInterface
+interface Discount {
+    int applyDiscount(int amount);
+}</code></pre>
+<pre><code class="language-java">Discount discount = (amt) -> {
+    int disc = amt * 5 / 100;
+    return amt - disc;
+};
+
+System.out.println(discount.applyDiscount(1000)); // 950</code></pre>
+
+<p><b>Predicate — condition checking:</b></p>
+<pre><code class="language-java">import java.util.function.Predicate;
+
+Predicate<Integer> isLessThan100 = (number) -> number < 100;
+
+System.out.println(isLessThan100.test(50));  // true
+System.out.println(isLessThan100.test(150)); // false</code></pre>
+
+<p><b>Supplier — no input, generates output (e.g. OTP):</b></p>
+<pre><code class="language-java">import java.util.function.Supplier;
+import java.util.Random;
+
+Supplier<Integer> otpGenerator = () -> new Random().nextInt(9000) + 1000;
+
+System.out.println("Your OTP is " + otpGenerator.get());</code></pre>
+
+<p><b>Consumer — input, no return (e.g. sending email):</b></p>
+<pre><code class="language-java">import java.util.function.Consumer;
+
+Consumer<String> emailSender = (email) -> System.out.println("Email sent to " + email);
+
+emailSender.accept("user@example.com"); // "Email sent to user@example.com"</code></pre>
+
+<p><b>Function — input, transform, output (e.g. discount calculation):</b></p>
+<pre><code class="language-java">import java.util.function.Function;
+
+Function<Integer, Integer> discountFunction = (amt) -> amt - (amt * 5 / 100);
+
+System.out.println(discountFunction.apply(100)); // 95</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Can a functional interface have default/static/private methods too?</td><td>Yes — as many as needed; only the count of abstract methods (must be exactly one) determines functional interface status.</td></tr>
+<tr><td>What happens if two functional interfaces (each with one method) are combined via inheritance?</td><td>If the child interface ends up with two distinct abstract methods total, it's no longer a valid functional interface, even though each parent was individually.</td></tr>
+<tr><td>What method does Predicate use? What about Consumer, Supplier, Function?</td><td>Predicate → test(); Supplier → get(); Consumer → accept(); Function → apply().</td></tr>
+<tr><td>Is @FunctionalInterface mandatory?</td><td>No, it's optional — but recommended as a safety check against future accidental method additions.</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>A functional interface must have exactly one abstract method — additional default/static/private methods don't count against this.</li>
+<li>Lambda expressions implement a functional interface's single method implicitly — no method name is written.</li>
+<li>@FunctionalInterface is optional but helps catch accidental additional abstract methods at compile time.</li>
+<li>Know the four core built-in functional interfaces and their exact method names — this is a very common interview question: Predicate (test), Supplier (get), Consumer (accept), Function (apply).</li>
+<li>Predicate always returns boolean; Supplier takes no input; Consumer returns nothing; Function transforms input to output.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Write your own custom functional interface (not a copied example) and implement it using a lambda expression.</li>
+<li>Add the @FunctionalInterface annotation and confirm adding a second abstract method causes a compile error.</li>
+<li>Use each of Predicate, Supplier, Consumer, and Function in a small example matching the patterns shown in class (condition check, OTP-style generation, "send" action, and transformation, respectively).</li>
+<li>Memorize the method names for each built-in functional interface (test/get/accept/apply) — flagged as a very common interview question.</li>
+<li>Research Stream API briefly, since these functional interfaces are heavily used there (mentioned as an upcoming connection point).</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Marker interfaces (Cloneable, Serializable) and instanceof</li>
+<li><b>Upcoming Topics:</b> Stream API (where these functional interfaces are used extensively); nested interfaces (mentioned but explicitly deprioritized as not commonly used in industry)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+Only section headings, grouping under labeled cards, the built-in interfaces table, and formatting/styling. No new technical content was added beyond what the instructor taught. Extensive live classroom Q&A and code-tracing was summarized into the relevant concept cards and code examples rather than transcribed as dialogue.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>
