@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend Notes - Class 40</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#eef4ff;color:#2c3e50;line-height:1.8;padding:40px;}
+.container{max-width:1100px;margin:auto;background:white;border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.15);}
+.header{background:linear-gradient(135deg,#0077ff,#6c63ff);color:white;padding:35px;}
+.header h1{font-size:34px;}
+.header p{margin-top:8px;opacity:.9;}
+.section{padding:30px 40px;border-bottom:1px solid #ececec;}
+.section h2{color:#0066ff;margin-bottom:18px;border-left:6px solid #0066ff;padding-left:12px;}
+.card{background:#f8fbff;border-left:5px solid #4CAF50;padding:18px;border-radius:10px;margin:18px 0;}
+ul{padding-left:22px;}
+li{margin-bottom:10px;}
+b{color:#d63384;}
+pre{border-radius:10px;margin-top:15px;margin-bottom:20px;font-size:15px;}
+code{font-size:15px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#0077ff;color:white;padding:12px;}
+td{padding:12px;border:1px solid #ddd;}
+.note{background:#fff8e6;border-left:6px solid orange;padding:18px;border-radius:10px;}
+.extra{background:#e8fff0;border-left:6px solid #27ae60;padding:18px;border-radius:10px;}
+.footer{text-align:center;padding:20px;background:#fafafa;color:#777;}
+.diagram-box{background:#fbfbff;border:1px solid #e0e0f0;border-radius:12px;padding:16px;margin:16px 0;text-align:center;}
+@media(max-width:768px){.section{padding:20px;}.header{padding:25px;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📘 Java Backend Notes</h1>
+<p>Class 40 — Shallow Cloning vs Deep Cloning</p>
+</div>
+
+<div class="section">
+<h2>🎯 Topics Covered</h2>
+<ul>
+<li>Recap: cloning basics, Cloneable, overriding clone()</li>
+<li>Why cloning is needed (avoiding expensive re-creation of similar objects)</li>
+<li>Shallow cloning — Java's default clone behavior</li>
+<li>Deep cloning — cloning nested/dependent objects explicitly</li>
+<li>How to identify shallow vs deep clone through shared vs separate references</li>
+<li>Implementing deep cloning manually</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 Key Concepts</h2>
+
+<div class="card">
+<b>Recap: Why Clone Instead of Creating a New Object?</b>
+<p>Creating a brand-new object from scratch (supplying every field again) can be more "expensive" (in effort/logic) than copying an existing, already-populated object and just modifying what's different. Analogy: reusing a photocopy of your Aadhar card is easier than requesting a fresh printed copy each time; similarly, apps like PhonePe let you "send again" to reuse a previous transaction's details instead of re-entering everything.</p>
+</div>
+
+<div class="card">
+<b>Recap: Cloning Requires Permission</b>
+<p>A class must implement the <code>Cloneable</code> marker interface and override the inherited <code>clone()</code> method (making it public) — otherwise calling <code>.clone()</code> throws <code>CloneNotSupportedException</code>.</p>
+</div>
+
+<div class="card">
+<b>Shallow Cloning — Java's Default Behavior</b>
+<p>When a class has a field that is itself an object of <b>another class</b> (a "nested" or dependent object — e.g. an <code>Employee</code> that has an <code>Address</code> field), Java's default <code>clone()</code> behavior only copies the <b>top-level object</b>. The nested object's <b>reference</b> is copied, not the nested object itself — meaning <b>both</b> the original and the cloned object end up pointing to the <b>exact same</b> nested object in memory.</p>
+</div>
+
+<div class="card">
+<b>The Consequence of Shallow Cloning</b>
+<p>Because the nested object is shared, modifying it through <b>either</b> the original or the cloned object affects <b>both</b> — since there's really only one nested object being referenced by two different parent objects. This can be a surprising and dangerous bug if you expect the clone to be fully independent.</p>
+</div>
+
+<div class="card">
+<b>Deep Cloning — Explicitly Cloning Nested Objects</b>
+<p>To make the clone <b>fully independent</b> of the original, you must manually clone the nested object(s) too, inside your overridden <code>clone()</code> method — assigning the newly cloned nested object to the cloned parent object's corresponding field. This requires the nested class to <b>also</b> implement <code>Cloneable</code> and override its own <code>clone()</code>.</p>
+</div>
+
+<div class="card">
+<b>How to Tell Shallow vs Deep Apart</b>
+<p>After cloning, modify the nested object's field through the <b>cloned</b> object. If the change also appears in the <b>original</b> object → it was <b>shallow</b> (shared reference). If the original remains unchanged → it was <b>deep</b> (fully separate copy).</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>🖼️ Diagram — Shallow Cloning</h2>
+<div class="diagram-box">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;">
+<style>
+  .lbl{font-family:'Poppins',sans-serif;font-size:14px;fill:#2d2d2d;}
+  .lbl-b{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;fill:#2d2d2d;}
+  .small{font-family:'Poppins',sans-serif;font-size:12px;fill:#555;}
+</style>
+<rect x="10" y="10" width="700" height="320" rx="14" fill="#eef4ff" stroke="#c7d8ff" stroke-width="1.5"/>
+<text x="30" y="35" class="lbl-b" fill="#0066ff">HEAP (Shallow Clone)</text>
+
+<rect x="40" y="60" width="180" height="90" rx="10" fill="#d3f1df" stroke="#2eae6d" stroke-width="2"/>
+<text x="60" y="85" class="lbl-b">Employee (e1)</text>
+<text x="60" y="108" class="lbl">name: "Nitya"</text>
+<text x="60" y="130" class="lbl">address: ────────┐</text>
+
+<rect x="500" y="60" width="180" height="90" rx="10" fill="#d3f1df" stroke="#2eae6d" stroke-width="2"/>
+<text x="520" y="85" class="lbl-b">Employee (e2)</text>
+<text x="520" y="108" class="lbl">name: "Nitya"</text>
+<text x="520" y="130" class="lbl">└──────── :address</text>
+
+<rect x="280" y="220" width="180" height="90" rx="10" fill="#fdecc8" stroke="#e8a33d" stroke-width="2"/>
+<text x="300" y="245" class="lbl-b">Address (SHARED)</text>
+<text x="300" y="268" class="lbl">line1: "BTM"</text>
+<text x="300" y="288" class="lbl">city: "Bangalore"</text>
+
+<line x1="150" y1="150" x2="360" y2="220" stroke="#e8a33d" stroke-width="2.5" marker-end="url(#arrow1)"/>
+<line x1="590" y1="150" x2="400" y2="220" stroke="#e8a33d" stroke-width="2.5" marker-end="url(#arrow1)"/>
+
+<defs>
+<marker id="arrow1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+<path d="M0,0 L0,6 L9,3 z" fill="#e8a33d"/>
+</marker>
+</defs>
+
+<text x="360" y="330" class="small" text-anchor="middle" fill="#b5651d">⚠ e1 and e2 both point to the SAME Address object — modifying one affects both</text>
+</svg>
+</div>
+</div>
+
+<div class="section">
+<h2>🖼️ Diagram — Deep Cloning</h2>
+<div class="diagram-box">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;">
+<style>
+  .lbl2{font-family:'Poppins',sans-serif;font-size:14px;fill:#2d2d2d;}
+  .lbl-b2{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;fill:#2d2d2d;}
+  .small2{font-family:'Poppins',sans-serif;font-size:12px;fill:#555;}
+</style>
+<rect x="10" y="10" width="700" height="320" rx="14" fill="#eef4ff" stroke="#c7d8ff" stroke-width="1.5"/>
+<text x="30" y="35" class="lbl-b2" fill="#0066ff">HEAP (Deep Clone)</text>
+
+<rect x="40" y="60" width="180" height="90" rx="10" fill="#d3f1df" stroke="#2eae6d" stroke-width="2"/>
+<text x="60" y="85" class="lbl-b2">Employee (e1)</text>
+<text x="60" y="108" class="lbl2">name: "Nitya"</text>
+<text x="60" y="130" class="lbl2">address: ──┐</text>
+
+<rect x="500" y="60" width="180" height="90" rx="10" fill="#d3f1df" stroke="#2eae6d" stroke-width="2"/>
+<text x="520" y="85" class="lbl-b2">Employee (e2)</text>
+<text x="520" y="108" class="lbl2">name: "Nitya"</text>
+<text x="520" y="130" class="lbl2">address: ──┐</text>
+
+<rect x="60" y="220" width="180" height="90" rx="10" fill="#fdecc8" stroke="#e8a33d" stroke-width="2"/>
+<text x="80" y="245" class="lbl-b2">Address (original)</text>
+<text x="80" y="268" class="lbl2">line1: "BTM"</text>
+<text x="80" y="288" class="lbl2">city: "Bangalore"</text>
+
+<rect x="480" y="220" width="180" height="90" rx="10" fill="#fdecc8" stroke="#e8a33d" stroke-width="2"/>
+<text x="500" y="245" class="lbl-b2">Address (cloned copy)</text>
+<text x="500" y="268" class="lbl2">line1: "BTM"</text>
+<text x="500" y="288" class="lbl2">city: "Bangalore"</text>
+
+<line x1="130" y1="150" x2="150" y2="220" stroke="#e8a33d" stroke-width="2.5" marker-end="url(#arrow2)"/>
+<line x1="590" y1="150" x2="570" y2="220" stroke="#e8a33d" stroke-width="2.5" marker-end="url(#arrow2)"/>
+
+<defs>
+<marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+<path d="M0,0 L0,6 L9,3 z" fill="#e8a33d"/>
+</marker>
+</defs>
+
+<text x="360" y="330" class="small2" text-anchor="middle" fill="#2eae6d">✔ e1 and e2 have SEPARATE Address objects — modifying one does NOT affect the other</text>
+</svg>
+</div>
+</div>
+
+<div class="section">
+<h2>💻 Code Snippets / Examples</h2>
+
+<p><b>Setup — Employee has a nested Address:</b></p>
+<pre><code class="language-java">class Address implements Cloneable {
+    String line1;
+    String city;
+
+    public Address(String line1, String city) {
+        this.line1 = line1;
+        this.city = city;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}</code></pre>
+
+<p><b>Shallow clone — Java's default (only override employee's clone, don't touch address):</b></p>
+<pre><code class="language-java">class Employee implements Cloneable {
+    String name;
+    Address address;
+
+    public Employee(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); // SHALLOW — address reference is just copied, not cloned
+    }
+}</code></pre>
+<pre><code class="language-java">Address address1 = new Address("BTM", "Bangalore");
+Employee e1 = new Employee("Nitya", address1);
+Employee e2 = (Employee) e1.clone(); // shallow clone
+
+e2.address.line1 = "Test Address"; // modifying through e2...
+System.out.println(e1.address.line1); // ALSO prints "Test Address" — shared object!</code></pre>
+
+<p><b>Deep clone — manually clone the nested object too:</b></p>
+<pre><code class="language-java">class Employee implements Cloneable {
+    String name;
+    Address address;
+
+    public Employee(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Employee cloned = (Employee) super.clone();
+        cloned.address = (Address) this.address.clone(); // DEEP — clone the nested object too
+        return cloned;
+    }
+}</code></pre>
+<pre><code class="language-java">Address address1 = new Address("BTM", "Bangalore");
+Employee e1 = new Employee("Nitya", address1);
+Employee e2 = (Employee) e1.clone(); // deep clone
+
+e2.address.line1 = "Test Address"; // modifying through e2...
+System.out.println(e1.address.line1); // still prints "BTM" — SEPARATE object now!
+System.out.println(e2.address.line1); // "Test Address"</code></pre>
+
+</div>
+
+<div class="section">
+<h2>❓ Doubts / Questions Raised in Class</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>By default, does Java clone nested objects too?</td><td>No — by default Java performs a shallow clone, meaning nested object references are copied as-is (shared), not the nested objects themselves.</td></tr>
+<tr><td>How do you achieve a deep clone?</td><td>Manually clone each nested object inside your overridden clone() method, and assign the newly cloned nested object to the cloned parent's field — the nested class must also implement Cloneable.</td></tr>
+<tr><td>How can you tell, by testing, whether a clone was shallow or deep?</td><td>Modify a nested object's field via the cloned object; if the original object's nested field also changes, it was shallow (shared); if it doesn't change, it was deep (separate).</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📌 Important Points / Common Mistakes</h2>
+<ul>
+<li>Java's default clone() behavior is shallow — nested object references are shared, not duplicated.</li>
+<li>To achieve a deep clone, you must explicitly clone each nested/dependent object inside your overridden clone() method.</li>
+<li>Nested classes must also implement Cloneable and override clone() to support being deep-cloned.</li>
+<li>Shallow cloning can cause subtle bugs where modifying a "cloned" object unexpectedly affects the original, via shared nested references.</li>
+<li>Always test cloning behavior by modifying a nested field and checking whether the original is affected.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>✅ Action Items / Homework</h2>
+<ul>
+<li>Build the Employee/Address example, implement shallow cloning (default), and confirm that modifying the nested Address via the clone also changes the original.</li>
+<li>Convert your implementation to deep cloning by manually cloning the Address inside Employee's clone() method.</li>
+<li>Confirm that after the fix, modifying the nested Address via the clone no longer affects the original.</li>
+<li>Try a 3-level nested structure (e.g. Employee → Address → City) and think through what additional cloning would be needed for a fully deep clone at every level.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔗 Connects To</h2>
+<ul>
+<li><b>Previous Class:</b> Serialization, deserialization, transient, and serialVersionUID</li>
+<li><b>Upcoming Topics:</b> Continued object-creation topics or a new Java feature area (to be confirmed in the next class)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>➕ Added by ChatGPT (Optional)</h2>
+<div class="extra">
+The two SVG diagrams (shallow and deep cloning memory layout) were custom-built to visually clarify what the instructor described verbally in class — this is an added visual aid, not something shown on-screen during the session itself. All other content — section headings, grouping under labeled cards, and formatting — reflects only what the instructor taught. No new technical content was added beyond what was explained in class.
+</div>
+</div>
+
+<div class="footer">
+Made for Java Backend Revision 📚
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+</html>
